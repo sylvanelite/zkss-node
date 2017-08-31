@@ -78,7 +78,7 @@ server.get('/stop', function(req, res) {
 var pg = require('pg');
 server.get('/db',function (request, response){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('SELECT * FROM test_table', function(err, result) {
+    client.query('SELECT MAX(id) FROM messages', function(err, result) {
       done();
       if (err)
        { console.error(err); response.send("Error " + err); }
