@@ -140,7 +140,7 @@ server.get('/db/getUpdates',function (request, response){
 	var uid = request.query.uid;
 	var area = request.query.area;
 	var mid = request.query.mid;
-    client.query('SELECT id,message FROM messages WHERE (id > &1 and "user" != $2 and area = $3)',[mid,uid,area], function(err, result) {
+    client.query('SELECT id,message FROM messages WHERE (id > $1 and "user" != $2 and area = $3)',[mid,uid,area], function(err, result) {
 		done();
 		if (err){
 			console.error(err);
