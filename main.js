@@ -95,7 +95,7 @@ server.get('/db',function (request, response){
 
 server.get('/dbm',function (request, response){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('CREATE TABLE messages (  id int(11) NOT NULL AUTO_INCREMENT,  user text NOT NULL,  area int(11) NOT NULL,  message text NOT NULL,  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,  PRIMARY KEY (id));', function(err, result) {
+    client.query('CREATE TABLE messages (  "id" int(11) NOT NULL AUTO_INCREMENT,  "user" text NOT NULL,  "area" int(11) NOT NULL,  "message" text NOT NULL, "timestamp" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,  PRIMARY KEY (id));', function(err, result) {
 
       done();
       if (err)
