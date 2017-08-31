@@ -78,6 +78,7 @@ server.get('/stop', function(req, res) {
 var pg = require('pg');
 
 server.get('/db/init',function (request, response){
+  response.header("Access-Control-Allow-Origin", "*");
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('SELECT MAX(id) FROM messages', function(err, result) {
 		done();
@@ -100,9 +101,8 @@ server.get('/db/init',function (request, response){
     });
   });
 });
-
-
 server.get('/db/kvs_save',function (request, response){
+  response.header("Access-Control-Allow-Origin", "*");
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 	var k = request.query.data_key;
 	var v = request.query.data_value;
@@ -119,8 +119,8 @@ server.get('/db/kvs_save',function (request, response){
     });
   });
 });
-
 server.get('/db/kvs_load',function (request, response){
+  response.header("Access-Control-Allow-Origin", "*");
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 	var k = request.query.data_key;
     client.query(' SELECT data_value FROM kvs WHERE (data_key=$1)',[k], function(err, result) {
@@ -134,8 +134,8 @@ server.get('/db/kvs_load',function (request, response){
     });
   });
 });
-
 server.get('/db/getUpdates',function (request, response){
+  response.header("Access-Control-Allow-Origin", "*");
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 	var uid = request.query.uid;
 	var area = request.query.area;
@@ -158,6 +158,7 @@ server.get('/db/getUpdates',function (request, response){
   });
 });
 server.get('/db/setUpdates',function (request, response){
+  response.header("Access-Control-Allow-Origin", "*");
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 	var uid = request.query.uid;
 	var area = request.query.area;
