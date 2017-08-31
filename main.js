@@ -4,7 +4,6 @@ const express = require('express');
 const socketIO = require('socket.io');
 const path = require('path');
 
-const IP_ADDRESS = process.env.IP || "127.0.0.1";
 const PORT =  process.env.PORT || 8080;
 const INDEX = path.join(__dirname, './index.html');
 const GAME = path.join(__dirname, './game.html');
@@ -13,7 +12,7 @@ const GAME = path.join(__dirname, './game.html');
 const server = express();
 server.get('/', function(req, res) { res.sendFile(INDEX); });
 server.use('/', express.static(path.join(__dirname, '.')));
-let requestHandler = server.listen(PORT, IP_ADDRESS, () => console.log(`Listening on ${ PORT }`));
+let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 const io = socketIO(requestHandler);
 
 // Game Server
