@@ -85,7 +85,7 @@ server.get('/db',function (request, response){
       else
        {
 		
-	result.send("Query"+result.rows);
+	response.send("Query"+result.rows);
 		
 		 }
     });
@@ -103,7 +103,7 @@ server.get('/dbm',function (request, response){
       else
        {
 		
-	result.send("Query"+result.rows);
+	response.send("create");
 		
 		 }
     });
@@ -119,7 +119,7 @@ client.query('CREATE TABLE kvs (  data_key varchar(255) NOT NULL,  data_value te
       else
        {
 		
-	result.send("Query"+result.rows);
+	response.send("Qcreate");
 		
 		 }
     });
