@@ -1,0 +1,26 @@
+var CONSTS = {
+    SEED:42,
+    WORLD_WIDTH:1024,
+    WORLD_HEIGHT:1024,
+    TILE_SIZE:32,
+    VIEW_WIDTH:30,
+    VIEW_HEIGHT:30,
+    KEYS:{
+        TAB:9
+        //...etc
+    },
+    CONTROL_SOURCE:{
+        NONE:0,
+        KEYBOARD:1,
+        NETWORK:2,
+        AI:3
+    },
+    CAMERA:{
+        FPS:0,
+        ORBIT:1
+    },
+    MATH:{
+        DEG_TO_RAD:0.0174533,
+        RAD_TO_DEG:57.2958
+    }
+};
