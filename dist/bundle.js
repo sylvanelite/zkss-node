@@ -28770,30 +28770,35 @@ utils.intFromLE = intFromLE;
 
 },{"bn.js":21,"minimalistic-assert":170,"minimalistic-crypto-utils":171}],90:[function(require,module,exports){
 module.exports={
-  "_from": "elliptic@^6.0.0",
+  "_args": [
+    [
+      "elliptic@6.4.0",
+      "/Users/Stephen/Dropbox/zkss/ZKSSTactics/Heroku/node-js"
+    ]
+  ],
+  "_from": "elliptic@6.4.0",
   "_id": "elliptic@6.4.0",
   "_inBundle": false,
   "_integrity": "sha1-ysmvh2LIWDYYcAPI3+GT5eLq5d8=",
   "_location": "/elliptic",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "version",
     "registry": true,
-    "raw": "elliptic@^6.0.0",
+    "raw": "elliptic@6.4.0",
     "name": "elliptic",
     "escapedName": "elliptic",
-    "rawSpec": "^6.0.0",
+    "rawSpec": "6.4.0",
     "saveSpec": null,
-    "fetchSpec": "^6.0.0"
+    "fetchSpec": "6.4.0"
   },
   "_requiredBy": [
     "/browserify-sign",
     "/create-ecdh"
   ],
   "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz",
-  "_shasum": "cac9af8762c85836187003c8dfe193e5e2eae5df",
-  "_spec": "elliptic@^6.0.0",
-  "_where": "/Users/Stephen/Dropbox/zkss/ZKSSTactics/OS/zkssnode/node_modules/browserify-sign",
+  "_spec": "6.4.0",
+  "_where": "/Users/Stephen/Dropbox/zkss/ZKSSTactics/Heroku/node-js",
   "author": {
     "name": "Fedor Indutny",
     "email": "fedor@indutny.com"
@@ -28801,7 +28806,6 @@ module.exports={
   "bugs": {
     "url": "https://github.com/indutny/elliptic/issues"
   },
-  "bundleDependencies": false,
   "dependencies": {
     "bn.js": "^4.4.0",
     "brorand": "^1.0.1",
@@ -28811,7 +28815,6 @@ module.exports={
     "minimalistic-assert": "^1.0.0",
     "minimalistic-crypto-utils": "^1.0.0"
   },
-  "deprecated": false,
   "description": "EC cryptography",
   "devDependencies": {
     "brfs": "^1.4.3",
@@ -49567,7 +49570,7 @@ class Car extends PhysicalObject {
 		obj.z = c * d * h + f * g * e;
 		obj.w = c * d * e - f * g * h;
 		return obj;
-	};
+	}
 	applyQuaternion(a,obj) {
 		var b = obj.x, c = obj.y, d = obj.z, e = a.x, f = a.y, g = a.z;
 		a = a.w;
@@ -49579,10 +49582,10 @@ class Car extends PhysicalObject {
 		obj.y = k * a + b * -f + l * -e - h * -g;
 		obj.z = l * a + b * -g + h * -f - k * -e;
 		return obj;
-	};
+	}
 	applySpace(){
 		if ( this.phys.canJump === true ){
-			//this.physicsObj.velocity.y = this.phys.jumpVelocity;
+			this.physicsObj.velocity.y = this.phys.jumpVelocity;
 			this.phys.canJump = false;
 		}
 		
