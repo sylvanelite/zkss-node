@@ -106,9 +106,9 @@ server.get('/db/kvs_save',function (request, response){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 	var k = request.query.data_key;
 	var v = request.query.data_value;
-    client.query('  INSERT INTO kvs (data_key, data_value)'+
-				'VALUES ($1, $2) ON CONFLICT (data_key) DO UPDATE'+
-				'SET  data_key=$1, data_value=$2',[k,v], function(err, result) {
+    client.query('  INSERT INTO kvs (data_key, data_value) '+
+				' VALUES ($1, $2) ON CONFLICT (data_key) DO UPDATE '+
+				' SET  data_key=$1, data_value=$2 ',[k,v], function(err, result) {
 		done();
 		if (err){
 			console.error(err);
