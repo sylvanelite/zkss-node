@@ -85,7 +85,7 @@ server.get('/db',function (request, response){
       else
        {
 		
-	res.send("Query"+result.rows);
+	result.send("Query"+result.rows);
 		
 		 }
     });
