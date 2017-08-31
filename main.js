@@ -92,3 +92,44 @@ server.get('/db',function (request, response){
   });
 	
 });
+
+server.get('/dbm',function (request, response){
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    client.query('CREATE TABLE messages (  id int(11) NOT NULL AUTO_INCREMENT,  user text NOT NULL,  area int(11) NOT NULL,  message text NOT NULL,  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,  PRIMARY KEY (id));', function(err, result) {
+
+      done();
+      if (err)
+       { console.error(err); response.send("Error " + err); }
+      else
+       {
+		
+	result.send("Query"+result.rows);
+		
+		 }
+    });
+  });
+	
+});
+server.get('/dbk',function (request, response){
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+client.query('CREATE TABLE kvs (  data_key varchar(255) NOT NULL,  data_value text NOT NULL,  PRIMARY KEY (data_key))', function(err, result) {
+        done();
+      if (err)
+       { console.error(err); response.send("Error " + err); }
+      else
+       {
+		
+	result.send("Query"+result.rows);
+		
+		 }
+    });
+  });
+	
+});
+
+
+
+
+
+
+
