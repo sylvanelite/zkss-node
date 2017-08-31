@@ -12,7 +12,7 @@ const GAME = path.join(__dirname, './game.html');
 const server = express();
 server.get('/', function(req, res) { res.sendFile(INDEX); });
 server.use('/', express.static(path.join(__dirname, '.')));
-let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+let requestHandler = server.listen(PORT, () => console.log(Listening on ${ PORT }));
 const io = socketIO(requestHandler);
 
 // Game Server
@@ -78,8 +78,19 @@ server.get('/stop', function(req, res) {
 var pg = require('pg');
 server.get('/db',function (request, response){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('CREATE TABLE kvs (  data_key varchar(255) NOT NULL,  data_value text NOT NULL,  PRIMARY KEY (data_key))', function(err, result) {
-      done();
+    //client.query('CREATE TABLE kvs (  data_key varchar(255) NOT NULL,  data_value text NOT NULL,  PRIMARY KEY (data_key))', function(err, result) {
+    client.query('CREATE TABLE messages (  id int(11) NOT NULL AUTO_INCREMENT,  user text NOT NULL,  area int(11) NOT NULL,  message text NOT NULL,  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,  PRIMARY KEY (id));', function(err, result) {
+
+
+
+
+
+
+
+
+
+
+	  done();
       if (err)
        { console.error(err); response.send("Error " + err); }
       else
