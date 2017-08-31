@@ -76,60 +76,103 @@ server.get('/stop', function(req, res) {
 });
 
 var pg = require('pg');
-server.get('/db',function (request, response){
+
+server.get('/db/init',function (request, response){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('SELECT MAX(id) FROM messages', function(err, result) {
-      done();
-      if (err)
-       { console.error(err); response.send("Error " + err); }
-      else
-       {
-		
-	response.send("Query"+result.rows);
-		
-		 }
+		done();
+		if (err){
+			console.error(err);
+			response.send("Error " + err);
+		}else{
+			response.send(result.rows[0]);
+		}
+		 pg.connect(process.env.DATABASE_URL, function(err2, client2, done2) {
+			client2.query("DELETE FROM messages WHERE timestamp < now()::date - 7", function(err2, result2) {
+				done2();
+				if (err2){
+					console.error(err2);
+				}else{
+					console.log(result2);
+				}
+			});
+		  });
     });
   });
-	
 });
 
-server.get('/dbm',function (request, response){
+
+server.get('/db/kvs_save',function (request, response){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('CREATE TABLE messages ("id" SERIAL PRIMARY KEY,  "user" varchar(100) NOT NULL, "area" int NOT NULL, "message" varchar(100) NOT NULL,    "timestamp" timestamp DEFAULT CURRENT_TIMESTAMP )', function(err, result) {
-
-      done();
-      if (err)
-       { console.error(err); response.send("Error " + err); }
-      else
-       {
-		
-	response.send("create");
-		
-		 }
+	var k = request.query.data_key;
+	var v = request.query.data_value;
+    client.query('  INSERT INTO kvs (data_key, data_value)'+
+				'VALUES ($1, $2) ON CONFLICT (data_key) DO UPDATE'+
+				'SET  data_key=$1, data_value=$2',[k,v], function(err, result) {
+		done();
+		if (err){
+			console.error(err);
+			response.send("Error " + err);
+		}else{
+			response.send("result"+result);
+		}
     });
   });
-	
 });
-server.get('/dbk',function (request, response){
+
+server.get('/db/kvs_load',function (request, response){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-client.query('CREATE TABLE kvs (  data_key varchar(255) NOT NULL,  data_value text NOT NULL,  PRIMARY KEY (data_key))', function(err, result) {
-        done();
-      if (err)
-       { console.error(err); response.send("Error " + err); }
-      else
-       {
-		
-	response.send("Qcreate");
-		
-		 }
+	var k = request.query.data_key;
+    client.query(' SELECT data_value FROM kvs WHERE (data_key=$1)',[k], function(err, result) {
+		done();
+		if (err){
+			console.error(err);
+			response.send("Error " + err);
+		}else{
+			response.send(result.rows[0]);
+		}
     });
   });
-	
 });
 
-
-
-
+server.get('/db/getUpdates',function (request, response){
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+	var uid = request.query.uid;
+	var area = request.query.area;
+	var mid = request.query.mid;
+    client.query('SELECT id,message FROM messages WHERE (id > &1 and user != $2 and area = $3)',[mid,uid,area], function(err, result) {
+		done();
+		if (err){
+			console.error(err);
+			response.send("Error " + err);
+		}else{
+			var xml =  "<root>";
+			for(var i=0;i<result.rows.length;i+=1){
+				xml+= "<m><i>" + result.rows[i].id + "</i>";
+				xml+= "<t>" + result.rows[i].message + "</t></m>";
+			}
+			xml+= "</root>";
+			response.send(xml);
+		}
+    });
+  });
+});
+server.get('/db/setUpdates',function (request, response){
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+	var uid = request.query.uid;
+	var area = request.query.area;
+	var message = request.query.message;
+    client.query(' INSERT INTO messages (user,area,message) VALUES ($1,$2,$3)',[uid,area,message], function(err, result) {
+		done();
+		if (err){
+			console.error(err);
+			response.send("Error " + err);
+		}else{
+			response.send("result"+result);
+		}
+    });
+  });
+});
 
 
 
