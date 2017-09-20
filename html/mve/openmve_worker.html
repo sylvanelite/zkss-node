@@ -139,7 +139,7 @@
 						canvas.height = h;
 						var ctx = canvas.getContext("2d");
 						ctx.drawImage(img,0,0);
-						$("#inputarea").append(canvas);
+						$("#inputarea").append(canvas, canvas.width, canvas.height);
 					};
 					img.src = fr.result;
 				};
