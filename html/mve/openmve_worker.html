@@ -88,7 +88,7 @@
 				$("#usermedia").show();
 				$("video").remove();
 				var video = document.createElement('video');
-				video.style.width = '200px';
+				video.style.width = '612px';
 				video.setAttribute('autoplay', '');
 				video.setAttribute('muted', '');
 				video.setAttribute('playsinline', '');
@@ -98,9 +98,14 @@
 					$("#usermedia").append(video);
 				};
 				var videoError = function(e) {
-					console.log("video error: "+e);
+					console.log("video error: ",e);
 				};
-				navigator.mediaDevices.getUserMedia({audio: false,video:{ facingMode: { exact: "environment" } }}).then(handleVideo).catch(videoError);
+				var constraints = {
+					optional: [{
+						facingMode: 'environment'
+					  }]
+				};				
+				navigator.mediaDevices.getUserMedia({audio: false,video:constraints}).then(handleVideo).catch(videoError);
 			});
 			var streams = [];
 			
@@ -108,7 +113,7 @@
 				var video = $("video")[0];
 				var canvas = document.createElement("canvas");
 				canvas.width = $(video).width();
-				canvas.height = 200;
+				canvas.height = $(video).height();
 				var ctx = canvas.getContext('2d');
 				ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 				$("#inputarea").append(canvas);
@@ -123,9 +128,10 @@
 				fr.onload = function () {
 					var img = new Image();
 					img.onload = function () {
+						img.style.width = '612px';
 						var canvas = document.createElement("canvas");
-						canvas.width = img.width;
-						canvas.height = img.height;
+						canvas.width = $(img).width();
+						canvas.height = $(img).height();
 						var ctx = canvas.getContext("2d");
 						ctx.drawImage(img,0,0);
 						$("#inputarea").append(canvas);
