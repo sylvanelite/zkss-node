@@ -101,9 +101,7 @@
 					console.log("video error: ",e);
 				};
 				var constraints = {
-					optional: [{
-						facingMode: 'environment'
-					  }]
+					facingMode: 'environment'
 				};				
 				navigator.mediaDevices.getUserMedia({audio: false,video:constraints}).then(handleVideo).catch(videoError);
 			});
