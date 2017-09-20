@@ -128,8 +128,14 @@
 					img.onload = function () {
 						img.style.width = '612px';
 						var canvas = document.createElement("canvas");
-						canvas.width = $(img).width();
-						canvas.height = $(img).height();
+						var w = this.width;
+						var h = this.height;
+						if(w>612){
+							var scale = 612/w;
+							h = h*scale;
+						}
+						canvas.width = w;
+						canvas.height = h;
 						var ctx = canvas.getContext("2d");
 						ctx.drawImage(img,0,0);
 						$("#inputarea").append(canvas);
