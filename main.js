@@ -52,13 +52,16 @@ var stopEngine = function (){
 };
 // start the game
 server.get('/game', function(req, res) {
+	/*
 	if(!started){
 		serverEngine.start();
 		started = true;
 	}
 	res.sendFile(GAME);
+	*/
 });
 server.get('/start', function(req, res) {
+	/*
 	if(started){
 		stopEngine();
 	}
@@ -66,13 +69,16 @@ server.get('/start', function(req, res) {
 	started = true;
 	res.send("Started");
 	//res.redirect("/game");
+	*/
 });
 server.get('/stop', function(req, res) {
+	/*
 	if(started){
 		stopEngine();
 	}
 	started = false;
 	res.send("Stopped");
+	*/
 });
 
 var pg = require('pg');
@@ -175,5 +181,5 @@ server.get('/db/setUpdates',function (request, response){
   });
 });
 
-
+server.use('/html', express.static('html'));
 
