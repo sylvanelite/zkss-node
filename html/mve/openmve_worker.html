@@ -105,10 +105,10 @@
 			var streams = [];
 			
 			$("#captureImg").on("click",function () {
-				var canvas = document.createElement("canvas");
-				canvas.width = $("#userVieoElem").width();
-				canvas.height = 200;
 				var video = $("video")[0];
+				var canvas = document.createElement("canvas");
+				canvas.width = $(video).width();
+				canvas.height = 200;
 				var ctx = canvas.getContext('2d');
 				ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 				$("#inputarea").append(canvas);
