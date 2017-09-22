@@ -50,6 +50,7 @@
     <script src="./FileSaver.min.js"></script>
 	<script type="text/javascript">
 		var init = function () {
+			var resolutionX = 1024;
 			$("#output").hide();
 			$("#go").on("click",function () {
 				var canvasses = $("canvas");
@@ -88,7 +89,7 @@
 				$("#usermedia").show();
 				$("video").remove();
 				var video = document.createElement('video');
-				video.style.width = '612px';
+				video.style.width = resolutionX+'px';
 				video.setAttribute('autoplay', '');
 				video.setAttribute('muted', '');
 				video.setAttribute('playsinline', '');
@@ -126,20 +127,20 @@
 				fr.onload = function () {
 					var img = new Image();
 					img.onload = function () {
-						img.style.width = '612px';
+						img.style.width = resolutionX+'px';
 						var canvas = document.createElement("canvas");
 						var w = this.width;
 						var h = this.height;
-						if(w>612){
-							var scale = 612/w;
+						if(w>resolutionX){
+							var scale = resolutionX/w;
 							h = h*scale;
-							w = 612;
+							w = resolutionX;
 						}
 						canvas.width = w;
 						canvas.height = h;
 						var ctx = canvas.getContext("2d");
 						ctx.drawImage(img,0,0,canvas.width, canvas.height);
-						$("#inputarea").append(canvas)
+						$("#inputarea").append(canvas);
 					};
 					img.src = fr.result;
 				};

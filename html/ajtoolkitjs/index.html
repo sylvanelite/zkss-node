@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Test</title>
+    <style>
+        html,
+        body {
+            font-family: arial;
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <script src="./jquery.min.js"></script>
+	<script src="./lib/artoolkit.debug.js"></script>
+	<script src="./lib/artoolkit.api.js"></script>
+	<script src="./lib/three.min.js"></script>
+	<script src="./lib/artoolkit.three.js"></script>
+	<script type="text/javascript">
+		var AR = {};
+		AR.init = function () {
+			var video = document.createElement('video');
+			document.body.appendChild(video);
+			navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+			var tw = 1280 / 2;
+			var th = 720 / 2;
+			var hdConstraints = {
+				audio: false,
+				video: {
+					mandatory: {
+						maxWidth: tw,
+						maxHeight: th
+					}
+				}
+			};
+			if (navigator.getUserMedia) {
+				navigator.getUserMedia(hdConstraints, success, errorCallback);
+			} else {
+				errorCallback('');
+			}
+			function errorCallback(e) {
+				console.log("Can't access user media", e);
+			}
+			function success(stream) {
+				console.log('AR.stream', stream);
+				AR.stream = stream;
+				video.src = window.URL.createObjectURL(stream);
+				video.onclick = function() { video.play(); };
+				video.play();
+				ARController.getUserMediaThreeScene({
+					maxARVideoSize: 640,
+					cameraParam: './lib/data/camera_para.dat',
+					onSuccess: function(arScene, arController, arCamera) {
+						console.log(arScene,arController,arCamera);
+						AR.scene = arScene;
+						AR.controller = arController;
+						AR.camera = arCamera;
+						//arController.debugSetup();
+						var rotationV = 0;
+						var rotationTarget = 0;
+						arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
+						var renderer = new THREE.WebGLRenderer({antialias: true});
+						var cube = new THREE.Mesh(
+							new THREE.BoxGeometry(1,1,1),
+							new THREE.MeshNormalMaterial()
+						);
+						cube.position.z = 0.5;
+						
+						arController.loadMarker('../lib/data/patt.hiro.txt', function(markerId) {
+							var markerRoot = arController.createThreeMarker(markerId, 3/*marker width*/);
+							markerRoot.add(cube);
+							AR.markerRoot = markerRoot;
+							arScene.scene.add(markerRoot);
+						});
+						var tick = function() {
+							arScene.process();
+							rotationV += (rotationTarget - cube.rotation.z) * 0.05;
+							cube.rotation.z += rotationV;
+							rotationV *= 0.8;
+							arScene.renderOn(renderer);
+							requestAnimationFrame(tick);
+						};
+						tick();
+					}
+				});
+			}
+		};
+		$(document).ready(AR.init);
+	</script>
+</body>
+
+</html>
