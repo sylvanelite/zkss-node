@@ -26,34 +26,15 @@
 	<script type="text/javascript">
 		var AR = {};
 		AR.init = function () {
+			
 			var video = document.createElement('video');
-			document.body.appendChild(video);
-			navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-			var tw = 1280 / 2;
-			var th = 720 / 2;
-			var hdConstraints = {
-				audio: false,
-				video: {
-					mandatory: {
-						maxWidth: tw,
-						maxHeight: th
-					}
-				}
-			};
-			if (navigator.getUserMedia) {
-				navigator.getUserMedia(hdConstraints, success, errorCallback);
-			} else {
-				errorCallback('');
-			}
-			function errorCallback(e) {
-				console.log("Can't access user media", e);
-			}
-			function success(stream) {
-				console.log('AR.stream', stream);
+			video.style.width = resolutionX+'px';
+			video.setAttribute('autoplay', '');
+			video.setAttribute('muted', '');
+			video.setAttribute('playsinline', '');
+			var handleVideo = function (stream) {
+				video.srcObject = stream;
 				AR.stream = stream;
-				video.src = window.URL.createObjectURL(stream);
-				video.onclick = function() { video.play(); };
-				video.play();
 				ARController.getUserMediaThreeScene({
 					maxARVideoSize: 640,
 					cameraParam: './lib/data/camera_para.dat',
@@ -90,7 +71,14 @@
 						tick();
 					}
 				});
-			}
+			};
+			var videoError = function(e) {
+				console.log("video error: ",e);
+			};
+			var constraints = {
+				facingMode: 'environment'
+			};				
+			navigator.mediaDevices.getUserMedia({audio: false,video:constraints}).then(handleVideo).catch(videoError);
 		};
 		$(document).ready(AR.init);
 	</script>
