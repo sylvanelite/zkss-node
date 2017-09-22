@@ -1080,12 +1080,6 @@
 
 		var video = document.createElement('video');
 
-		var initProgress = function() {
-			if (this.videoWidth !== 0) {
-				onSuccess(video);
-			}
-		};
-
 		var readyToPlay = false;
 		var eventNames = [
 			'touchstart', 'touchend', 'touchmove', 'touchcancel',
@@ -1107,10 +1101,8 @@
 		});
 
 		var success = function(stream) {
-			video.addEventListener('loadedmetadata', initProgress, false);
-			video.src = window.URL.createObjectURL(stream);
-			readyToPlay = true;
-			play(); // Try playing without user input, should work on non-Android Chrome
+			video.srcObject = stream;
+			onSuccess(video);
 		};
 
 		var constraints = {};
