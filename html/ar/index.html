@@ -44,6 +44,7 @@
 				//arController.debugSetup();
 				arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
 				var renderer = new THREE.WebGLRenderer({antialias: true});
+				$("body").append(AR.renderer.domElement );
 				AR.renderer = renderer;
 				var cube = new THREE.Mesh(
 					new THREE.BoxGeometry(1,1,1),
@@ -62,7 +63,7 @@
 			var videoSuccess = function (video,stream) {
 				AR.videoElem = video;
 				AR.stream = stream;
-				$("body").append(AR.videoElem);
+				//$("body").append(AR.videoElem);
 			};
 			ARController.getUserMediaThreeScene({
 				onSuccess: getMediaSuccess,
