@@ -44,8 +44,8 @@
 				//arController.debugSetup();
 				arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
 				var renderer = new THREE.WebGLRenderer({antialias: true});
-				$("body").append(AR.renderer.domElement );
 				AR.renderer = renderer;
+				$("body").append(AR.renderer.domElement );
 				var cube = new THREE.Mesh(
 					new THREE.BoxGeometry(1,1,1),
 					new THREE.MeshNormalMaterial()
