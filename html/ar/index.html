@@ -32,46 +32,70 @@
 			video.setAttribute('autoplay', '');
 			video.setAttribute('muted', '');
 			video.setAttribute('playsinline', '');
+			
+			var onSuccess = function(arScene, arController, arCamera) {
+				console.log(arScene,arController,arCamera);
+				AR.scene = arScene;
+				AR.controller = arController;
+				AR.camera = arCamera;
+				//arController.debugSetup();
+				var rotationV = 0;
+				var rotationTarget = 0;
+				arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
+				var renderer = new THREE.WebGLRenderer({antialias: true});
+				var cube = new THREE.Mesh(
+					new THREE.BoxGeometry(1,1,1),
+					new THREE.MeshNormalMaterial()
+				);
+				cube.position.z = 0.5;
+				
+				arController.loadMarker('./lib/data/patt.hiro.txt', function(markerId) {
+					var markerRoot = arController.createThreeMarker(markerId, 3);//2nd param = marker width
+					markerRoot.add(cube);
+					AR.markerRoot = markerRoot;
+					arScene.scene.add(markerRoot);
+				});
+				var tick = function() {
+					arScene.process();
+					rotationV += (rotationTarget - cube.rotation.z) * 0.05;
+					cube.rotation.z += rotationV;
+					rotationV *= 0.8;
+					arScene.renderOn(renderer);
+					requestAnimationFrame(tick);
+				};
+				tick();
+			};
 			var handleVideo = function (stream) {
 				video.srcObject = stream;
 				AR.stream = stream;
 				AR.videoElem = video;
 				$("body").append(video);
-				ARController.getUserMediaThreeScene({
-					maxARVideoSize: 640,
-					cameraParam: './lib/data/camera_para.dat',
-					onSuccess: function(arScene, arController, arCamera) {
-						console.log(arScene,arController,arCamera);
-						AR.scene = arScene;
-						AR.controller = arController;
-						AR.camera = arCamera;
-						//arController.debugSetup();
-						var rotationV = 0;
-						var rotationTarget = 0;
-						arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
-						var renderer = new THREE.WebGLRenderer({antialias: true});
-						var cube = new THREE.Mesh(
-							new THREE.BoxGeometry(1,1,1),
-							new THREE.MeshNormalMaterial()
-						);
-						cube.position.z = 0.5;
-						
-						arController.loadMarker('./lib/data/patt.hiro.txt', function(markerId) {
-							var markerRoot = arController.createThreeMarker(markerId, 3/*marker width*/);
-							markerRoot.add(cube);
-							AR.markerRoot = markerRoot;
-							arScene.scene.add(markerRoot);
-						});
-						var tick = function() {
-							arScene.process();
-							rotationV += (rotationTarget - cube.rotation.z) * 0.05;
-							cube.rotation.z += rotationV;
-							rotationV *= 0.8;
-							arScene.renderOn(renderer);
-							requestAnimationFrame(tick);
-						};
-						tick();
+				new ARCameraParam('./lib/data/camera_para.dat', function() {
+					var arCameraParam = this;
+					var maxSize = Math.max(video.videoWidth, video.videoHeight);
+					var f = maxSize / Math.max(video.videoWidth, video.videoHeight);
+					var w = f * video.videoWidth;
+					var h = f * video.videoHeight;
+					if (video.videoWidth < video.videoHeight) {
+						var tmp = w;
+						w = h;
+						h = tmp;
 					}
+					var arController = new ARController(w, h, arCameraParam);
+					arController.image = video;
+					if (video.videoWidth < video.videoHeight) {
+						arController.orientation = 'portrait';
+						arController.videoWidth = video.videoHeight;
+						arController.videoHeight = video.videoWidth;
+					} else {
+						arController.orientation = 'landscape';
+						arController.videoWidth = video.videoWidth;
+						arController.videoHeight = video.videoHeight;
+					}
+					var arScene = arController.createThreeScene();
+					onSuccess(arScene, arController, arCameraParam);
+				}, function(err) {
+					console.error("ARController: Failed to load ARCameraParam", err);
 				});
 			};
 			var videoError = function(e) {
