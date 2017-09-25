@@ -71,6 +71,8 @@
 				AR.videoElem = video;
 				AR.stream = stream;
 				$("body").append(AR.videoElem);
+				$(AR.videoElem).css("position","absolute");
+				$(AR.videoElem).css("z-index","-1000");
 			};
 			ARController.getUserMediaThreeScene({
 				onSuccess: getMediaSuccess,
