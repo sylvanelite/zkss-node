@@ -35,6 +35,8 @@
 			var handleVideo = function (stream) {
 				video.srcObject = stream;
 				AR.stream = stream;
+				AR.videoElem = video;
+				$("body").append(video);
 				ARController.getUserMediaThreeScene({
 					maxARVideoSize: 640,
 					cameraParam: './lib/data/camera_para.dat',
