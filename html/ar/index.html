@@ -58,12 +58,19 @@
 					AR.markerRoot = markerRoot;
 					arScene.scene.add(markerRoot);
 				});
+					
+				//if (AR.controller.orientation === 'portrait') {
+				var w = (window.innerWidth / AR.controller.videoHeight) * AR.controller.videoWidth;
+				var h = window.innerWidth;
+				AR.renderer.setSize(w, h);
+				//AR.renderer.domElement.style.paddingBottom = (w-h) + 'px';
+				
 				AR.render();
 			};
 			var videoSuccess = function (video,stream) {
 				AR.videoElem = video;
 				AR.stream = stream;
-				//$("body").append(AR.videoElem);
+				$("body").append(AR.videoElem);
 			};
 			ARController.getUserMediaThreeScene({
 				onSuccess: getMediaSuccess,
