@@ -1088,8 +1088,9 @@
                 configuration.onVideoSuccess(video,stream);
             }
             video.onloadedmetadata=function () {
+                console.log("here");
                 onSuccess(video);
-            }
+            };
 		};
 		var constraints = {
 			audio: false,
