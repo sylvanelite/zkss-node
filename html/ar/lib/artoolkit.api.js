@@ -1073,160 +1073,40 @@
 		@return {VideoElement} Returns the created video element.
 	*/
 	ARController.getUserMedia = function(configuration) {
-		var facing = configuration.facingMode || 'environment';
-
 		var onSuccess = configuration.onSuccess;
 		var onError = configuration.onError || function(err) { console.error("ARController.getUserMedia", err); };
 
 		var video = document.createElement('video');
-
-		var readyToPlay = false;
-		var eventNames = [
-			'touchstart', 'touchend', 'touchmove', 'touchcancel',
-			'click', 'mousedown', 'mouseup', 'mousemove',
-			'keydown', 'keyup', 'keypress', 'scroll'
-		];
-		var play = function(ev) {
-			if (readyToPlay) {
-				video.play();
-				if (!video.paused) {
-					eventNames.forEach(function(eventName) {
-						window.removeEventListener(eventName, play, true);
-					});
-				}
-			}
-		};
-		eventNames.forEach(function(eventName) {
-			window.addEventListener(eventName, play, true);
-		});
+        video.style.width = (configuration.maxARVideoSize)+'px';
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
 
 		var success = function(stream) {
 			video.srcObject = stream;
-			onSuccess(video);
+            if(configuration.hasOwnProperty("onVideoSuccess")){
+                configuration.onVideoSuccess(video,stream);
+            }
+            video.onloadedmetadata=function () {
+                onSuccess(video);
+            }
 		};
-
-		var constraints = {};
-		var mediaDevicesConstraints = {};
-		if (configuration.width) {
-			mediaDevicesConstraints.width = configuration.width;
-			if (typeof configuration.width === 'object') {
-				if (configuration.width.max) {
-					constraints.maxWidth = configuration.width.max;
-				}
-				if (configuration.width.min) {
-					constraints.minWidth = configuration.width.max;
-				}
-			} else {
-				constraints.maxWidth = configuration.width;
-			}
-		}
-
-		if (configuration.height) {
-			mediaDevicesConstraints.height = configuration.height;
-			if (typeof configuration.height === 'object') {
-				if (configuration.height.max) {
-					constraints.maxHeight = configuration.height.max;
-				}
-				if (configuration.height.min) {
-					constraints.minHeight = configuration.height.max;
-				}
-			} else {
-				constraints.maxHeight = configuration.height;
-			}
-		}
-
-		mediaDevicesConstraints.facingMode = facing;
-
-		navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-		var hdConstraints = {
+		var constraints = {
 			audio: false,
 			video: {
-				mandatory: constraints
+                width: (configuration.maxARVideoSize),
+                facingMode: 'environment'
 		  	}
 		};
 
-		if ( false ) {
-		// if ( navigator.mediaDevices || window.MediaStreamTrack) {
-			if (navigator.mediaDevices) {
-				navigator.mediaDevices.getUserMedia({
-					audio: false,
-					video: mediaDevicesConstraints
-				}).then(success, onError); 
-			} else {
-				MediaStreamTrack.getSources(function(sources) {
-					var facingDir = mediaDevicesConstraints.facingMode;
-					if (facing && facing.exact) {
-						facingDir = facing.exact;
-					}
-					for (var i=0; i<sources.length; i++) {
-						if (sources[i].kind === 'video' && sources[i].facing === facingDir) {
-							hdConstraints.video.mandatory.sourceId = sources[i].id;
-							break;
-						}
-					}
-					if (facing && facing.exact && !hdConstraints.video.mandatory.sourceId) {
-						onError('Failed to get camera facing the wanted direction');
-					} else {
-						if (navigator.getUserMedia) {
-							navigator.getUserMedia(hdConstraints, success, onError);
-						} else {
-							onError('navigator.getUserMedia is not supported on your browser');
-						}
-					}
-				});
-			}
-		} else {
-			if (navigator.getUserMedia) {
-				navigator.getUserMedia(hdConstraints, success, onError);
-			} else {
-				onError('navigator.getUserMedia is not supported on your browser');
-			}
-		}
+        if (navigator.getUserMedia) {
+			navigator.mediaDevices.getUserMedia(constraints).then(success).catch(onError);
+        } else {
+            onError('navigator.getUserMedia is not supported on your browser');
+        }
 
 		return video;
 	};
-
-	/**
-		ARController.getUserMediaARController gets an ARController for the device camera video feed and calls the 
-		given onSuccess callback with it.
-
-		To use ARController.getUserMediaARController, call it with an object with the cameraParam attribute set to
-		a camera parameter file URL, and the onSuccess attribute set to a callback function.
-
-			ARController.getUserMediaARController({
-				cameraParam: 'Data/camera_para.dat',
-				onSuccess: function(arController, arCameraParam) {
-					console.log("Got ARController", arController);
-					console.log("Got ARCameraParam", arCameraParam);
-					console.log("Got video", arController.image);
-				}
-			});
-
-		The configuration object supports the following attributes:
-
-			{
-				onSuccess : function(ARController, ARCameraParam),
-				onError : function(error),
-
-				cameraParam: url, // URL to camera parameters definition file.
-				maxARVideoSize: number, // Maximum max(width, height) for the AR processing canvas.
-
-				width : number | {min: number, ideal: number, max: number},
-				height : number | {min: number, ideal: number, max: number},
-
-				facingMode : 'environment' | 'user' | 'left' | 'right' | { exact: 'environment' | ... }
-			}
-
-		See https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia for more information about the
-		width, height and facingMode attributes.
-
-		The orientation attribute of the returned ARController is set to "portrait" if the userMedia video has larger
-		height than width. Otherwise it's set to "landscape". The videoWidth and videoHeight attributes of the arController
-		are set to be always in landscape configuration so that width is larger than height.
-
-		@param {object} configuration The configuration object.
-		@return {VideoElement} Returns the created video element.
-	*/
 	ARController.getUserMediaARController = function(configuration) {
 		var obj = {};
 		for (var i in configuration) {
@@ -1247,6 +1127,7 @@
 					w = h;
 					h = tmp;
 				}
+                console.log(f,w,h,video.videoWidth,video.videoHeight);
 				var arController = new ARController(w, h, arCameraParam);
 				arController.image = video;
 				if (video.videoWidth < video.videoHeight) {

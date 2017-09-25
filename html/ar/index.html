@@ -27,22 +27,18 @@
 		var AR = {};
 		AR.beginLoad = function (){
 			if (window.ARController && ARController.getUserMediaThreeScene) {
-				AR.init ();
+				AR.init();
 			}
 		};
 		AR.init = function () {
 			
-			var video = document.createElement('video');
-			video.style.width = '612px';
-			video.setAttribute('autoplay', '');
-			video.setAttribute('muted', '');
-			video.setAttribute('playsinline', '');
 			
-			var onSuccess = function(arScene, arController, arCamera) {
-				console.log(arScene,arController,arCamera);
+			var getMediaSuccess = function (arScene, arController, arCamera){
+				console.log("here");
 				AR.scene = arScene;
 				AR.controller = arController;
 				AR.camera = arCamera;
+				console.log(arScene,arController,arCamera);
 				//arController.debugSetup();
 				var rotationV = 0;
 				var rotationTarget = 0;
@@ -70,46 +66,19 @@
 				};
 				tick();
 			};
-			var handleVideo = function (stream) {
-				video.srcObject = stream;
-				AR.stream = stream;
+			var videoSuccess = function (video,stream) {
+				console.log("there",video,stream);
 				AR.videoElem = video;
-				$("body").append(video);
-				new ARCameraParam('./lib/data/camera_para.dat', function() {
-					var arCameraParam = this;
-					var maxSize = Math.max(video.videoWidth, video.videoHeight);
-					var f = maxSize / Math.max(video.videoWidth, video.videoHeight);
-					var w = f * video.videoWidth;
-					var h = f * video.videoHeight;
-					if (video.videoWidth < video.videoHeight) {
-						var tmp = w;
-						w = h;
-						h = tmp;
-					}
-					var arController = new ARController(w, h, arCameraParam);
-					arController.image = video;
-					if (video.videoWidth < video.videoHeight) {
-						arController.orientation = 'portrait';
-						arController.videoWidth = video.videoHeight;
-						arController.videoHeight = video.videoWidth;
-					} else {
-						arController.orientation = 'landscape';
-						arController.videoWidth = video.videoWidth;
-						arController.videoHeight = video.videoHeight;
-					}
-					var arScene = arController.createThreeScene();
-					onSuccess(arScene, arController, arCameraParam);
-				}, function(err) {
-					console.error("ARController: Failed to load ARCameraParam", err);
-				});
+				AR.stream = stream;
+				$("body").append(AR.videoElem);
 			};
-			var videoError = function(e) {
-				console.log("video error: ",e);
-			};
-			var constraints = {
-				facingMode: 'environment'
-			};				
-			navigator.mediaDevices.getUserMedia({audio: false,video:constraints}).then(handleVideo).catch(videoError);
+			ARController.getUserMediaThreeScene({
+				onSuccess: getMediaSuccess,
+				onVideoSuccess: videoSuccess,
+				maxARVideoSize: 320,
+				cameraParam: "./lib/data/camera_para.dat"
+			});
+			
 		};
 		$(document).ready(AR.beginLoad);
 	</script>
