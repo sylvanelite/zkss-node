@@ -1094,7 +1094,6 @@
 		var constraints = {
 			audio: false,
 			video: {
-                width: (configuration.maxARVideoSize),
                 facingMode: 'environment'
 		  	}
 		};
@@ -1127,7 +1126,6 @@
 					w = h;
 					h = tmp;
 				}
-                console.log(f,w,h,video.videoWidth,video.videoHeight);
 				var arController = new ARController(w, h, arCameraParam);
 				arController.image = video;
 				if (video.videoWidth < video.videoHeight) {
