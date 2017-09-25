@@ -25,6 +25,11 @@
 	<script src="./lib/artoolkit.three.js"></script>
 	<script type="text/javascript">
 		var AR = {};
+		AR.beginLoad = function (){
+			if (window.ARController && ARController.getUserMediaThreeScene) {
+				AR.init ();
+			}
+		};
 		AR.init = function () {
 			
 			var video = document.createElement('video');
@@ -106,7 +111,7 @@
 			};				
 			navigator.mediaDevices.getUserMedia({audio: false,video:constraints}).then(handleVideo).catch(videoError);
 		};
-		$(document).ready(AR.init);
+		$(document).ready(AR.beginLoad);
 	</script>
 </body>
 
