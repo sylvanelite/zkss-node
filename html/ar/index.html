@@ -54,7 +54,7 @@
 						);
 						cube.position.z = 0.5;
 						
-						arController.loadMarker('../lib/data/patt.hiro.dat', function(markerId) {
+						arController.loadMarker('./lib/data/patt_hiro.dat', function(markerId) {
 							var markerRoot = arController.createThreeMarker(markerId, 3/*marker width*/);
 							markerRoot.add(cube);
 							AR.markerRoot = markerRoot;
