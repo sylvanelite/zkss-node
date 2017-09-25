@@ -1077,7 +1077,6 @@
 		var onError = configuration.onError || function(err) { console.error("ARController.getUserMedia", err); };
 
 		var video = document.createElement('video');
-        video.style.width = (configuration.maxARVideoSize)+'px';
         video.setAttribute('autoplay', '');
         video.setAttribute('muted', '');
         video.setAttribute('playsinline', '');
@@ -1088,7 +1087,6 @@
                 configuration.onVideoSuccess(video,stream);
             }
             video.onloadedmetadata=function () {
-                console.log("here");
                 onSuccess(video);
             };
 		};
@@ -1118,7 +1116,7 @@
 		obj.onSuccess = function() {
 			new ARCameraParam(cameraParamURL, function() {
 				var arCameraParam = this;
-				var maxSize = configuration.maxARVideoSize || Math.max(video.videoWidth, video.videoHeight);
+				var maxSize = Math.max(video.videoWidth, video.videoHeight);
 				var f = maxSize / Math.max(video.videoWidth, video.videoHeight);
 				var w = f * video.videoWidth;
 				var h = f * video.videoHeight;
