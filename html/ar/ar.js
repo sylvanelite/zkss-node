@@ -37,6 +37,12 @@ AR.init = function () {
             AR.markerRoot = markerRoot;
             AR.scene.scene.add(markerRoot);
             $(AR.renderer.domElement).css("transform","rotate(-90deg)");
+            //if (AR.controller.orientation === 'portrait') {
+            var w = (window.innerWidth / AR.controller.videoHeight) * AR.controller.videoWidth;
+            var h = window.innerWidth;
+            AR.renderer.setSize(w, h);
+    
+            //AR.renderer.domElement.style.paddingBottom = (w-h) + 'px';
         });
         arController.loadMarker('./lib/data/patt.kanji.txt', function(markerId) {
             var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
@@ -44,13 +50,8 @@ AR.init = function () {
             AR.markerRootK = markerRoot;
             AR.scene.scene.add(markerRoot);
         });
-            
-        //if (AR.controller.orientation === 'portrait') {
-        var w = (window.innerWidth / AR.controller.videoHeight) * AR.controller.videoWidth;
-        var h = window.innerWidth;
-        AR.renderer.setSize(w, h);
+        //AR.markerRootK.children[0].getWorldPosition()
 
-        //AR.renderer.domElement.style.paddingBottom = (w-h) + 'px';
         
         AR.render();
     };
