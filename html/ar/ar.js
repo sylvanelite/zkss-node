@@ -38,8 +38,8 @@ AR.init = function () {
             AR.scene.scene.add(markerRoot);
             $(AR.renderer.domElement).css("transform","rotate(-90deg)");
             //if (AR.controller.orientation === 'portrait') {
-            var w = (window.innerWidth / AR.controller.videoHeight) * AR.controller.videoWidth;
-            var h = window.innerWidth;
+            var w = AR.controller.videoWidth;
+            var h = AR.controller.videoHeight;
             AR.renderer.setSize(w, h);
     
             //AR.renderer.domElement.style.paddingBottom = (w-h) + 'px';
