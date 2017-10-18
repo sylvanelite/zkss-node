@@ -1026,7 +1026,7 @@
 		});
 
 		var success = function(stream) {
-            if(!view.hasOwnProperty("srcObject")){//older
+            if(!video.hasOwnProperty("srcObject")){//older
                 video.addEventListener('loadedmetadata', initProgress, false);
                 video.src = window.URL.createObjectURL(stream);
                 readyToPlay = true;
