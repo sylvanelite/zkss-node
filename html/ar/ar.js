@@ -24,9 +24,13 @@ AR.beginLoad = function (){
 AR.render = function (){
     AR.scene.process();
     if(AR.markerRoots.length>1){
-        var coord1 = AR.toScreenPosition(AR.markerRoots[0]);
-        var coord2 = AR.toScreenPosition(AR.markerRoots[1]);
-        console.log(coord1,coord2);
+        var m1=AR.markerRoots[0];
+        var m2=AR.markerRoots[1];
+        if(m1.visible && m1.visible){
+            var coord1 = AR.toScreenPosition();
+            var coord2 = AR.toScreenPosition(AR.markerRoots[1]);
+            console.log(coord1,coord2);
+        }
     }
     AR.scene.renderOn(AR.renderer);
     requestAnimationFrame(AR.render);
