@@ -3,18 +3,23 @@
 
 	/**
 		The ARController is the main object for doing AR marker detection with JSARToolKit.
+
 		To use an ARController, you need to tell it the dimensions to use for the AR processing canvas and
 		pass it an ARCameraParam to define the camera parameters to use when processing images. 
 		The ARCameraParam defines the lens distortion and aspect ratio of the camera used. 
 		See https://www.artoolworks.com/support/library/Calibrating_your_camera for more information about AR camera parameteters and how to make and use them.
+
 		If you pass an image as the first argument, the ARController uses that as the image to process,
 		using the dimensions of the image as AR processing canvas width and height. If the first argument
 		to ARController is an image, the second argument is used as the camera param.
+
 		The camera parameters argument can be either an ARCameraParam or an URL to a camera definition file.
 		If the camera argument is an URL, it is loaded into a new ARCameraParam, and the ARController dispatches
 		a 'load' event and calls the onload method if it is defined.
+
 	 	@exports ARController
 	 	@constructor
+
 		@param {number} width The width of the images to process.
 		@param {number} height The height of the images to process.
 		@param {ARCameraParam | string} camera The ARCameraParam to use for image processing. If this is a string, the ARController treats it as an URL and tries to load it as a ARCameraParam definition file, calling ARController#onload on success. 
@@ -22,18 +27,8 @@
 	var ARController = function(width, height, camera) {
 		var id;
 		var w = width, h = height;
-
-		this.orientation = 'landscape';
-
+        this.orientation = 'landscape';
 		this.listeners = {};
-
-		if (typeof width !== 'number') {
-			var image = width;
-			camera = height;
-			w = image.videoWidth || image.width;
-			h = image.videoHeight || image.height;
-			this.image = image;
-		}
 
 		this.defaultMarkerWidth = 1;
 		this.patternMarkers = {};
@@ -44,9 +39,6 @@
 		this.canvas.width = w;
 		this.canvas.height = h;
 		this.ctx = this.canvas.getContext('2d');
-
-		this.videoWidth = w;
-		this.videoHeight = h;
 
 		if (typeof camera === 'string') {
 
@@ -68,6 +60,7 @@
 	/**
 		Destroys the ARController instance and frees all associated resources.
 		After calling dispose, the ARController can't be used any longer. Make a new one if you need one.
+
 		Calling this avoids leaking Emscripten memory, which may be important if you're using multiple ARControllers.
 	*/
 	ARController.prototype.dispose = function() {
@@ -80,6 +73,7 @@
 
 	/**
 		Detects markers in the given image. The process method dispatches marker detection events during its run.
+
 		The marker detection process proceeds by first dispatching a markerNum event that tells you how many
 		markers were found in the image. Next, a getMarker event is dispatched for each found marker square.
 		Finally, getMultiMarker is dispatched for every found multimarker, followed by getMultiMarkerSub events
@@ -101,8 +95,12 @@
 			});
 			
 			arController.process(image);	
+
+
 		If no image is given, defaults to this.image.
+
 		If the debugSetup has been called, draws debug markers on the debug canvas.
+
 		@param {ImageElement | VideoElement} image The image to process [optional]. 
 	*/
 	ARController.prototype.process = function(image) {
@@ -212,9 +210,11 @@
 	/**
 		Adds the given pattern marker ID to the index of tracked IDs.
 		Sets the markerWidth for the pattern marker to markerWidth.
+
 		Used by process() to implement continuous tracking, 
 		keeping track of the marker's transformation matrix
 		and customizable marker widths.
+
 		@param {number} id ID of the pattern marker to track.
 		@param {number} markerWidth The width of the marker to track.
 		@return {Object} The marker tracking object.
@@ -238,9 +238,11 @@
 	/**
 		Adds the given barcode marker ID to the index of tracked IDs.
 		Sets the markerWidth for the pattern marker to markerWidth.
+
 		Used by process() to implement continuous tracking, 
 		keeping track of the marker's transformation matrix
 		and customizable marker widths.
+
 		@param {number} id ID of the barcode marker to track.
 		@param {number} markerWidth The width of the marker to track.
 		@return {Object} The marker tracking object.
@@ -263,6 +265,7 @@
 
 	/**
 		Returns the number of multimarkers registered on this ARController.
+
 		@return {number} Number of multimarkers registered.
 	*/
 	ARController.prototype.getMultiMarkerCount = function() {
@@ -271,6 +274,7 @@
 
 	/**
 		Returns the number of markers in the multimarker registered for the given multiMarkerId.
+
 		@param {number} multiMarkerId The id number of the multimarker to access. Given by loadMultiMarker.
 		@return {number} Number of markers in the multimarker. Negative value indicates failure to find the multimarker.
 	*/
@@ -281,11 +285,13 @@
 	/**
 		Add an event listener on this ARController for the named event, calling the callback function
 		whenever that event is dispatched.
+
 		Possible events are: 
 		  * getMarker - dispatched whenever process() finds a square marker
 		  * getMultiMarker - dispatched whenever process() finds a visible registered multimarker
 		  * getMultiMarkerSub - dispatched by process() for each marker in a visible multimarker
 		  * load - dispatched when the ARController is ready to use (useful if passing in a camera URL in the constructor)
+
 		@param {string} name Name of the event to listen to.
 		@param {function} callback Callback function to call when an event with the given name is dispatched.
 	*/
@@ -298,6 +304,7 @@
 
 	/**
 		Remove an event listener from the named event.
+
 		@param {string} name Name of the event to stop listening to.
 		@param {function} callback Callback function to remove from the listeners of the named event.
 	*/
@@ -312,6 +319,7 @@
 
 	/**
 		Dispatches the given event to all registered listeners on event.name.
+
 		@param {Object} event Event to dispatch.
 	*/
 	ARController.prototype.dispatchEvent = function(event) {
@@ -325,6 +333,7 @@
 
 	/**
 		Sets up a debug canvas for the AR detection. Draws a red marker on top of each detected square in the image.
+
 		The debug canvas is added to document.body.
 	*/
 	ARController.prototype.debugSetup = function() {
@@ -335,7 +344,9 @@
 
 	/**
 		Loads a pattern marker from the given URL and calls the onSuccess callback with the UID of the marker.
+
 		arController.loadMarker(markerURL, onSuccess, onError);
+
 		@param {string} markerURL - The URL of the marker pattern file to load.
 		@param {function} onSuccess - The success callback. Called with the id of the loaded marker on a successful load.
 		@param {function} onError - The error callback. Called with the encountered error if the load fails.
@@ -346,7 +357,9 @@
 
 	/**
 		Loads a multimarker from the given URL and calls the onSuccess callback with the UID of the marker.
+
 		arController.loadMultiMarker(markerURL, onSuccess, onError);
+
 		@param {string} markerURL - The URL of the multimarker pattern file to load.
 		@param {function} onSuccess - The success callback. Called with the id and the number of sub-markers of the loaded marker on a successful load.
 		@param {function} onError - The error callback. Called with the encountered error if the load fails.
@@ -422,7 +435,9 @@
 	/**
 		Converts the given 3x4 marker transformation matrix in the 12-element transMat array
 		into a 4x4 WebGL matrix and writes the result into the 16-element glMat array.
+
 		If scale parameter is given, scales the transform of the glMat by the scale parameter.
+
 		@param {Float64Array} transMat The 3x4 marker transformation matrix.
 		@param {Float64Array} glMat The 4x4 GL transformation matrix.
 		@param {number} scale The scale for the transform.
@@ -462,6 +477,7 @@
         structures with information on each detected marker, followed by a step in which
         detected markers are possibly examined for some measure of goodness of match (e.g. by
         examining the match confidence value) and pose extraction.
+
 		@param {image} Image to be processed to detect markers.
 		@return {number}     0 if the function proceeded without error, or a value less than 0 in case of error.
 			A result of 0 does not however, imply any markers were detected.
@@ -486,11 +502,16 @@
 
 	/**
 		Get the marker info struct for the given marker index in detected markers.
+
 		Call this.detectMarker first, then use this.getMarkerNum to get the detected marker count.
+
 		The returned object is the global artoolkit.markerInfo object and will be overwritten
 		by subsequent calls. If you need to hang on to it, create a copy using this.cloneMarkerInfo();
+
 		Returns undefined if no marker was found.
+
 		A markerIndex of -1 is used to access the global custom marker.
+
 		The fields of the markerInfo struct are:
 		    @field      area Area in pixels of the largest connected region, comprising the marker border and regions connected to it. Note that this is
 		        not the same as the actual onscreen area inside the marker border.
@@ -506,6 +527,8 @@
 			@field      pos 2D position (in camera image coordinates, origin at top-left) of the centre of the marker.
 			@field      line Line equations for the 4 sides of the marker.
 			@field      vertex 2D positions (in camera image coordinates, origin at top-left) of the corners of the marker. vertex[(4 - dir)%4][] is the top-left corner of the marker. Other vertices proceed clockwise from this. These are idealised coordinates (i.e. the onscreen position aligns correctly with the undistorted camera image.)
+
+
 		@param {number} markerIndex The index of the marker to query.
 		@returns {Object} The markerInfo struct.
 	*/
@@ -517,9 +540,13 @@
 
 	/**
 		Set marker vertices to the given vertexData[4][2] array.
+
 		Sets the marker pos to the center of the vertices.
+
 		Useful for building custom markers for getTransMatSquare.
+
 		A markerIndex of -1 is used to access the global custom marker.
+
 		@param {number} markerIndex The index of the marker to edit.
 	*/
 	ARController.prototype.setMarkerInfoVertex = function(markerIndex, vertexData) {
@@ -532,6 +559,7 @@
 
 	/**
 		Makes a deep copy of the given marker info.
+
 		@param {Object} markerInfo The marker info object to copy.
 		@return {Object} The new copy of the marker info.
 	*/
@@ -541,14 +569,19 @@
 
 	/**
 		Get the marker info struct for the given marker index in detected markers.
+
 		Call this.detectMarker first, then use this.getMarkerNum to get the detected marker count.
+
 		The returned object is the global artoolkit.markerInfo object and will be overwritten
 		by subsequent calls. If you need to hang on to it, create a copy using this.cloneMarkerInfo();
+
 		Returns undefined if no marker was found.
+
 		@field {number} pattId The index of the marker.
 		@field {number} pattType The type of the marker. Either AR_MULTI_PATTERN_TYPE_TEMPLATE or AR_MULTI_PATTERN_TYPE_MATRIX.
 		@field {number} visible 0 or larger if the marker is visible
 		@field {number} width The width of the marker.
+
 		@param {number} multiMarkerId The multimarker to query.
 		@param {number} markerIndex The index of the marker to query.
 		@returns {Object} The markerInfo struct.
@@ -563,7 +596,9 @@
 	/**
 		Returns the 16-element WebGL transformation matrix used by ARController.process to 
 		pass marker WebGL matrices to event listeners.
+
 		Unique to each ARController.
+
 		@return {Float64Array} The 16-element WebGL transformation matrix used by the ARController.
 	*/
 	ARController.prototype.getTransformationMatrix = function() {
@@ -582,6 +617,7 @@
 	/**
 		Returns the shared ARToolKit 3x4 marker transformation matrix, used for passing and receiving
 		marker transforms to/from the Emscripten side.
+
 		@return {Float64Array} The 12-element 3x4 row-major marker transformation matrix used by ARToolKit.
 	*/
 	ARController.prototype.getMarkerTransformationMatrix = function() {
@@ -613,6 +649,7 @@
 
 	/**
 		Returns the Emscripten HEAP offset to the debug processing image used by ARToolKit.
+
 		@return {number} HEAP offset to the debug processing image.
 	*/
 	ARController.prototype.getProcessingImage = function() {
@@ -621,6 +658,7 @@
 
 	/**
 		Sets the logging level to use by ARToolKit.
+
 		@param 
 	*/
 	ARController.prototype.setLogLevel = function(mode) {
@@ -654,6 +692,7 @@
 
 	/**
 	    Set the labeling threshold mode (auto/manual).
+
 	    @param {number}		mode An integer specifying the mode. One of:
 	        AR_LABELING_THRESH_MODE_MANUAL,
 	        AR_LABELING_THRESH_MODE_AUTO_MEDIAN,
@@ -676,6 +715,7 @@
 
 	/**
     	Set the labeling threshhold.
+
         This function forces sets the threshold value.
         The default value is AR_DEFAULT_LABELING_THRESH which is 100.
         
@@ -694,6 +734,7 @@
 		value typically needs to be adjusted dynamically to a
 		suitable midpoint between the observed values for black
 		and white portions of the markers in the image.
+
 		@param {number}     thresh An integer in the range [0,255] (inclusive).
 	*/
 	ARController.prototype.setThreshold = function(threshold) {
@@ -702,13 +743,17 @@
 
 	/**
 	    Get the current labeling threshold.
+
 		This function queries the current labeling threshold. For,
 		AR_LABELING_THRESH_MODE_AUTO_MEDIAN, AR_LABELING_THRESH_MODE_AUTO_OTSU,
 		and AR_LABELING_THRESH_MODE_AUTO_BRACKETING
 		the threshold value is only valid until the next auto-update.
+
 		The current threshold mode is not affected by this call.
+
 		The threshold value is not relevant if threshold mode is
 		AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE.
+
 	    @return {number} The current threshold value.
 	*/
 	ARController.prototype.getThreshold = function() {
@@ -718,6 +763,7 @@
 
 	/**
 		Set the pattern detection mode
+
 		The pattern detection determines the method by which ARToolKit
 		matches detected squares in the video image to marker templates
 		and/or IDs. ARToolKit v4.x can match against pictorial "template" markers,
@@ -726,6 +772,7 @@
 		markers, which have an embedded marker ID. Two different two-pass modes
 		are also available, in which a matrix-detection pass is made first,
 		followed by a template-matching pass.
+
 		@param {number} mode
 			Options for this field are:
 			AR_TEMPLATE_MATCHING_COLOR
@@ -741,6 +788,7 @@
 
 	/**
 		Returns the current pattern detection mode.
+
 		@return {number} The current pattern detection mode.
 	*/
 	ARController.prototype.getPatternDetectionMode = function() {
@@ -749,11 +797,14 @@
 
 	/**
 		Set the size and ECC algorithm to be used for matrix code (2D barcode) marker detection.
+
 		When matrix-code (2D barcode) marker detection is enabled (see arSetPatternDetectionMode)
 		then the size of the barcode pattern and the type of error checking and correction (ECC)
 		with which the markers were produced can be set via this function.
+
 		This setting is global to a given ARHandle; It is not possible to have two different matrix
 		code types in use at once.
+
 	    @param      type The type of matrix code (2D barcode) in use. Options include:
 	        AR_MATRIX_CODE_3x3
 	        AR_MATRIX_CODE_3x3_HAMMING63
@@ -769,6 +820,7 @@
 
 	/**
 		Returns the current matrix code (2D barcode) marker detection type.
+
 		@return {number} The current matrix code type.
 	*/
 	ARController.prototype.getMatrixCodeType = function() {
@@ -784,6 +836,7 @@
 		This function allows you to specify the type of markers to look for.
 		Note that this does not affect the pattern-detection algorith
 		which works on the interior of the marker.
+
 		@param {number}      mode
 			Options for this field are:
 			AR_LABELING_WHITE_REGION
@@ -798,6 +851,7 @@
 		Enquire whether detection is looking for black markers or white markers.
 	    
 	    See discussion for setLabelingMode.
+
 	    @result {number} The current labeling mode.
 	*/
 	ARController.prototype.getLabelingMode = function() {
@@ -806,6 +860,7 @@
 
 	/**
 		Set the width/height of the marker pattern space, as a proportion of marker width/height.
+
 	    @param {number}		pattRatio The the width/height of the marker pattern space, as a proportion of marker
 	        width/height. To set the default, pass AR_PATT_RATIO.
 	        If compatibility with ARToolKit verions 1.0 through 4.4 is required, this value
@@ -817,6 +872,7 @@
 
 	/**
 		Returns the current ratio of the marker pattern to the total marker size.
+
 		@return {number} The current pattern ratio.
 	*/
 	ARController.prototype.getPattRatio = function() {
@@ -825,6 +881,7 @@
 
 	/**
 	    Set the image processing mode.
+
         When the image processing mode is AR_IMAGE_PROC_FRAME_IMAGE,
         ARToolKit processes all pixels in each incoming image
         to locate markers. When the mode is AR_IMAGE_PROC_FIELD_IMAGE,
@@ -836,6 +893,7 @@
         The effective reduction by 75% in the pixels processed also
         has utility in accelerating tracking by effectively reducing
         the image size to one quarter size, at the cost of pose accuraccy.
+
 	    @param {number} mode
 			Options for this field are:
 			AR_IMAGE_PROC_FRAME_IMAGE
@@ -848,7 +906,9 @@
 
 	/**
 	    Get the image processing mode.
+
 		See arSetImageProcMode() for a complete description.
+
 	    @return {number} The current image processing mode.
 	*/
 	ARController.prototype.getImageProcMode = function() {
@@ -858,11 +918,12 @@
 
 	/**
 		Draw the black and white image and debug markers to the ARController canvas.
+
 		See setDebugMode.
 	*/
 	ARController.prototype.debugDraw = function() {
 		var debugBuffer = new Uint8ClampedArray(Module.HEAPU8.buffer, this._bwpointer, this.framesize);
-		var id = new ImageData(debugBuffer, this.canvas.width, this.canvas.height)
+		var id = new ImageData(debugBuffer, this.canvas.width, this.canvas.height);
 		this.ctx.putImageData(id, 0, 0)
 
 		var marker_num = this.getMarkerNum();
@@ -886,7 +947,7 @@
 		this.camera_mat = new Float64Array(Module.HEAPU8.buffer, params.camera, 16);
 		this.marker_transform_mat = new Float64Array(Module.HEAPU8.buffer, params.transform, 12);
 
-		this.setProjectionNearPlane(0.1)
+		this.setProjectionNearPlane(0.1);
 		this.setProjectionFarPlane(1000);
 
 		var self = this;
@@ -907,15 +968,13 @@
 		}
 
 		this.ctx.save();
-
-		if (this.orientation === 'portrait') {
-			this.ctx.translate(this.canvas.width, 0);
-			this.ctx.rotate(Math.PI/2);
-			this.ctx.drawImage(image, 0, 0, this.canvas.height, this.canvas.width); // draw video
-		} else {
-			this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height); // draw video
-		}
-
+		if (this.orientation === 'portrait') {		
+				this.ctx.translate(this.canvas.width, 0);		
+				this.ctx.rotate(Math.PI/2);		
+				this.ctx.drawImage(image, 0, 0, this.canvas.height, this.canvas.width); // draw video		
+			} else {		
+				this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height); // draw video		
+			}
 		this.ctx.restore();
 
 		var imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
@@ -934,32 +993,32 @@
 		var ctx = this.ctx;
 		ctx.strokeStyle = 'red';
 
-		ctx.beginPath()
-		ctx.moveTo(vertex[0][0], vertex[0][1])
-		ctx.lineTo(vertex[1][0], vertex[1][1])
+		ctx.beginPath();
+		ctx.moveTo(vertex[0][0], vertex[0][1]);
+		ctx.lineTo(vertex[1][0], vertex[1][1]);
 		ctx.stroke();
 
-		ctx.beginPath()
-		ctx.moveTo(vertex[2][0], vertex[2][1])
-		ctx.lineTo(vertex[3][0], vertex[3][1])
-		ctx.stroke()
+		ctx.beginPath();
+		ctx.moveTo(vertex[2][0], vertex[2][1]);
+		ctx.lineTo(vertex[3][0], vertex[3][1]);
+		ctx.stroke();
 
 		ctx.strokeStyle = 'green';
-		ctx.beginPath()
-		ctx.lineTo(vertex[1][0], vertex[1][1])
-		ctx.lineTo(vertex[2][0], vertex[2][1])
+		ctx.beginPath();
+		ctx.lineTo(vertex[1][0], vertex[1][1]);
+		ctx.lineTo(vertex[2][0], vertex[2][1]);
 		ctx.stroke();
 
-		ctx.beginPath()
-		ctx.moveTo(vertex[3][0], vertex[3][1])
-		ctx.lineTo(vertex[0][0], vertex[0][1])
+		ctx.beginPath();
+		ctx.moveTo(vertex[3][0], vertex[3][1]);
+		ctx.lineTo(vertex[0][0], vertex[0][1]);
 		ctx.stroke();
 
-		pos = marker.pos
-		ctx.beginPath()
-		ctx.arc(pos[0], pos[1], 8, 0, Math.PI * 2)
-		ctx.fillStyle = 'red'
-		ctx.fill()
+		pos = marker.pos;
+		ctx.beginPath();
+		ctx.arc(pos[0], pos[1], 8, 0, Math.PI * 2);
+		ctx.fillStyle = 'red';
+		ctx.fill();
 	};
 
 
@@ -967,31 +1026,38 @@
 
 	/**
 		ARController.getUserMedia gets a device camera video feed and calls the given onSuccess callback with it.
+
 		Tries to start playing the video. Playing the video can fail on Chrome for Android,
 		so ARController.getUserMedia adds user input event listeners to the window
 		that try to start playing the video. On success, the event listeners are removed.
+
 		To use ARController.getUserMedia, call it with an object with the onSuccess attribute set to a callback function.
+
 			ARController.getUserMedia({
 				onSuccess: function(video) {
 					console.log("Got video", video);
 				}
 			});
+
 		The configuration object supports the following attributes:
+
 			{
 				onSuccess : function(video),
 				onError : function(error),
+
 				width : number | {min: number, ideal: number, max: number},
 				height : number | {min: number, ideal: number, max: number},
+
 				facingMode : 'environment' | 'user' | 'left' | 'right' | { exact: 'environment' | ... }
 			}
+
 		See https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia for more information about the
 		width, height and facingMode attributes.
+
 		@param {object} configuration The configuration object.
 		@return {VideoElement} Returns the created video element.
 	*/
 	ARController.getUserMedia = function(configuration) {
-		var facing = configuration.facingMode || 'environment';
-
 		var onSuccess = configuration.onSuccess;
 		var onError = configuration.onError || function(err) { console.error("ARController.getUserMedia", err); };
 
@@ -999,127 +1065,31 @@
         video.setAttribute('autoplay', '');
         video.setAttribute('muted', '');
         video.setAttribute('playsinline', '');
-		var initProgress = function() {
-			if (this.videoWidth !== 0) {
-				onSuccess(video);
-			}
-		};
-
-		var readyToPlay = false;
-		var eventNames = [
-			'touchstart', 'touchend', 'touchmove', 'touchcancel',
-			'click', 'mousedown', 'mouseup', 'mousemove',
-			'keydown', 'keyup', 'keypress', 'scroll'
-		];
-		var play = function(ev) {
-			if (readyToPlay) {
-				video.play();
-				if (!video.paused) {
-					eventNames.forEach(function(eventName) {
-						window.removeEventListener(eventName, play, true);
-					});
-				}
-			}
-		};
-		eventNames.forEach(function(eventName) {
-			window.addEventListener(eventName, play, true);
-		});
 
 		var success = function(stream) {
-            if(!video.hasOwnProperty("srcObject")){//older
-                video.addEventListener('loadedmetadata', initProgress, false);
-                video.src = window.URL.createObjectURL(stream);
-                readyToPlay = true;
-                play(); // Try playing without user input, should work on non-Android Chrome
-            }else{//iOS
-                video.onloadedmetadata=function () {
-	                onSuccess(video);
-	            };
+			video.srcObject = stream;
+            if(configuration.hasOwnProperty("onVideoSuccess")){
+                configuration.onVideoSuccess(video,stream);
             }
+            video.onloadedmetadata=function () {
+                onSuccess(video);
+            };
 		};
-
-		var constraints = {};
-		var mediaDevicesConstraints = {};
-		if (configuration.width) {
-			mediaDevicesConstraints.width = configuration.width;
-			if (typeof configuration.width === 'object') {
-				if (configuration.width.max) {
-					constraints.maxWidth = configuration.width.max;
-				}
-				if (configuration.width.min) {
-					constraints.minWidth = configuration.width.max;
-				}
-			} else {
-				constraints.maxWidth = configuration.width;
-			}
-		}
-
-		if (configuration.height) {
-			mediaDevicesConstraints.height = configuration.height;
-			if (typeof configuration.height === 'object') {
-				if (configuration.height.max) {
-					constraints.maxHeight = configuration.height.max;
-				}
-				if (configuration.height.min) {
-					constraints.minHeight = configuration.height.max;
-				}
-			} else {
-				constraints.maxHeight = configuration.height;
-			}
-		}
-
-		mediaDevicesConstraints.facingMode = facing;
-
-		navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-		var hdConstraints = {
+		var constraints = {
 			audio: false,
 			video: {
-				//mandatory: constraints
-                 facingMode: 'environment'
+                facingMode: 'environment'
 		  	}
 		};
 
-    
         if (navigator.getUserMedia) {
-            navigator.getUserMedia(hdConstraints, success, onError);
+			navigator.mediaDevices.getUserMedia(constraints).then(success).catch(onError);
         } else {
             onError('navigator.getUserMedia is not supported on your browser');
         }
 
 		return video;
 	};
-
-	/**
-		ARController.getUserMediaARController gets an ARController for the device camera video feed and calls the 
-		given onSuccess callback with it.
-		To use ARController.getUserMediaARController, call it with an object with the cameraParam attribute set to
-		a camera parameter file URL, and the onSuccess attribute set to a callback function.
-			ARController.getUserMediaARController({
-				cameraParam: 'Data/camera_para.dat',
-				onSuccess: function(arController, arCameraParam) {
-					console.log("Got ARController", arController);
-					console.log("Got ARCameraParam", arCameraParam);
-					console.log("Got video", arController.image);
-				}
-			});
-		The configuration object supports the following attributes:
-			{
-				onSuccess : function(ARController, ARCameraParam),
-				onError : function(error),
-				cameraParam: url, // URL to camera parameters definition file.
-				maxARVideoSize: number, // Maximum max(width, height) for the AR processing canvas.
-				width : number | {min: number, ideal: number, max: number},
-				height : number | {min: number, ideal: number, max: number},
-				facingMode : 'environment' | 'user' | 'left' | 'right' | { exact: 'environment' | ... }
-			}
-		See https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia for more information about the
-		width, height and facingMode attributes.
-		The orientation attribute of the returned ARController is set to "portrait" if the userMedia video has larger
-		height than width. Otherwise it's set to "landscape". The videoWidth and videoHeight attributes of the arController
-		are set to be always in landscape configuration so that width is larger than height.
-		@param {object} configuration The configuration object.
-		@return {VideoElement} Returns the created video element.
-	*/
 	ARController.getUserMediaARController = function(configuration) {
 		var obj = {};
 		for (var i in configuration) {
@@ -1131,26 +1101,26 @@
 		obj.onSuccess = function() {
 			new ARCameraParam(cameraParamURL, function() {
 				var arCameraParam = this;
-				var maxSize = configuration.maxARVideoSize || Math.max(video.videoWidth, video.videoHeight);
-				var f = maxSize / Math.max(video.videoWidth, video.videoHeight);
-				var w = f * video.videoWidth;
-				var h = f * video.videoHeight;
-				if (video.videoWidth < video.videoHeight) {
-					var tmp = w;
-					w = h;
-					h = tmp;
-				}
-				var arController = new ARController(w, h, arCameraParam);
+                var maxSize = Math.max(video.videoWidth, video.videoHeight);
+					var f = maxSize / Math.max(video.videoWidth, video.videoHeight);		
+					var w = f * video.videoWidth;		
+					var h = f * video.videoHeight;		
+					if (video.videoWidth < video.videoHeight) {		
+						var tmp = w;		
+						w = h;		
+						h = tmp;		
+					}
+				var arController = new ARController(vw, h, arCameraParam);
 				arController.image = video;
-				if (video.videoWidth < video.videoHeight) {
-					arController.orientation = 'portrait';
-					arController.videoWidth = video.videoHeight;
-					arController.videoHeight = video.videoWidth;
-				} else {
-					arController.orientation = 'landscape';
-					arController.videoWidth = video.videoWidth;
-					arController.videoHeight = video.videoHeight;
-				}
+                if (video.videoWidth < video.videoHeight) {		
+						arController.orientation = 'portrait';		
+						arController.videoWidth = video.videoHeight;		
+						arController.videoHeight = video.videoWidth;		
+					} else {		
+						arController.orientation = 'landscape';		
+						arController.videoWidth = video.videoWidth;		
+						arController.videoHeight = video.videoHeight;		
+					}
 				onSuccess(arController, arCameraParam);
 			}, function(err) {
 				console.error("ARController: Failed to load ARCameraParam", err);
@@ -1165,12 +1135,14 @@
 	/** 
 		ARCameraParam is used for loading AR camera parameters for use with ARController.
 		Use by passing in an URL and a callback function.
+
 			var camera = new ARCameraParam('Data/camera_para.dat', function() {
 				console.log('loaded camera', this.id);
 			},
 			function(err) {
 				console.log('failed to load camera', err);
 			});
+
 		@exports ARCameraParam
 		@constructor
 	 
@@ -1191,7 +1163,9 @@
 
 	/** 
 		Loads the given URL as camera parameters definition file into this ARCameraParam.
+
 		Can only be called on an unloaded ARCameraParam instance. 
+
 		@param {string} src URL to load.
 	*/
 	ARCameraParam.prototype.load = function(src) {
@@ -1222,6 +1196,7 @@
 
 	/**
 		Destroys the camera parameter and frees associated Emscripten resources.
+
 	*/
 	ARCameraParam.prototype.dispose = function() {
 		if (this.id !== -1) {
