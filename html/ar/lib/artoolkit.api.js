@@ -28,7 +28,7 @@
 		var id;
 		var w = width, h = height;
 
-		this.orientation = 'landscape';
+		this.orientation = 'portrait';
 
 		this.listeners = {};
 

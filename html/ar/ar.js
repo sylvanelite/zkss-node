@@ -18,7 +18,7 @@ AR.init = function () {
         console.log(arScene,arController,arCamera);
         //arController.debugSetup();
         arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
-        var renderer = new THREE.WebGLRenderer({antialias: true});
+        var renderer = new THREE.WebGLRenderer();
         AR.renderer = renderer;
         $("body").append(AR.renderer.domElement );
         var cube = new THREE.Mesh(
@@ -36,13 +36,9 @@ AR.init = function () {
             markerRoot.add(cube);
             AR.markerRoot = markerRoot;
             AR.scene.scene.add(markerRoot);
-            $(AR.renderer.domElement).css("transform","rotate(-90deg)");
-            //if (AR.controller.orientation === 'portrait') {
             var w = AR.controller.videoWidth;
             var h = AR.controller.videoHeight;
             AR.renderer.setSize(w, h);
-    
-            //AR.renderer.domElement.style.paddingBottom = (w-h) + 'px';
         });
         arController.loadMarker('./lib/data/patt.kanji.txt', function(markerId) {
             var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
