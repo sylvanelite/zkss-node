@@ -20,12 +20,8 @@ AR.init = function () {
         arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
         var renderer = new THREE.WebGLRenderer();
         AR.renderer = renderer;
-		var f = Math.min(
-			window.innerWidth / AR.scene.video.videoWidth,
-			window.innerHeight / AR.scene.video.videoHeight
-		);
-		var w = f * AR.scene.video.videoWidth;
-		var h = f * AR.scene.video.videoHeight;
+		var w = AR.scene.video.videoWidth;
+		var h = AR.scene.video.videoHeight;
 		if (AR.controller.orientation === 'portrait') {
 			renderer.setSize(h,w);
 			renderer.domElement.style.transformOrigin = '0 0';
