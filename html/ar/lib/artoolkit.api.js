@@ -1110,7 +1110,7 @@
 						w = h;		
 						h = tmp;		
 					}
-				var arController = new ARController(vw, h, arCameraParam);
+				var arController = new ARController(w, h, arCameraParam);
 				arController.image = video;
                 if (video.videoWidth < video.videoHeight) {		
 						arController.orientation = 'portrait';		
