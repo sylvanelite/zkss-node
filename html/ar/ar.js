@@ -16,7 +16,7 @@ AR.init = function () {
         AR.controller = arController;
         AR.camera = arCamera;
         console.log(arScene,arController,arCamera);
-        AR.renderer.setSize(AR.videoElem.videoWidth, AR.videoElem.videoHeight);
+        AR.renderer.setSize(AR.controller.image.videoWidth, AR.controller.image.videoHeight);
         //arController.debugSetup();
         arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
         var renderer = new THREE.WebGLRenderer();
