@@ -55,11 +55,11 @@ AR.init = function () {
             new THREE.MeshNormalMaterial()
         );
         cube.position.z = 0.5;
-        var cube2 = new THREE.Mesh(
-            new THREE.BoxGeometry(1,1,1),
+        var sphere = new THREE.Mesh(
+            new THREE.SphereGeometry( 5, 32, 32 ),
             new THREE.MeshNormalMaterial()
         );
-        cube2.position.z = 0.5;
+        sphere.position.z = 0.5;
         arController.loadMarker('./lib/data/patt.hiro.txt', function(markerId) {
             var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
             markerRoot.add(cube);
@@ -68,7 +68,7 @@ AR.init = function () {
         });
         arController.loadMarker('./lib/data/patt.kanji.txt', function(markerId) {
             var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
-            markerRoot.add(cube2);
+            markerRoot.add(sphere);
             AR.markerRootK = markerRoot;
             AR.scene.scene.add(markerRoot);
         });
