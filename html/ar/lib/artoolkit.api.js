@@ -1120,15 +1120,6 @@
 				var h = video.videoHeight;
 				var arController = new ARController(w, h, arCameraParam);
 				arController.image = video;
-				if (video.videoWidth < video.videoHeight) {
-					arController.orientation = 'portrait';
-					arController.videoWidth = video.videoHeight;
-					arController.videoHeight = video.videoWidth;
-				} else {
-					arController.orientation = 'landscape';
-					arController.videoWidth = video.videoWidth;
-					arController.videoHeight = video.videoHeight;
-				}
 				onSuccess(arController, arCameraParam);
 			}, function(err) {
 				console.error("ARController: Failed to load ARCameraParam", err);
