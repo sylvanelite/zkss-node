@@ -16,6 +16,7 @@ AR.init = function () {
         AR.controller = arController;
         AR.camera = arCamera;
         console.log(arScene,arController,arCamera);
+        AR.renderer.setSize(AR.videoElem.videoWidth, AR.videoElem.videoHeight);
         //arController.debugSetup();
         arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
         var renderer = new THREE.WebGLRenderer();
@@ -36,9 +37,6 @@ AR.init = function () {
             markerRoot.add(cube);
             AR.markerRoot = markerRoot;
             AR.scene.scene.add(markerRoot);
-            var w = AR.controller.videoWidth;
-            var h = AR.controller.videoHeight;
-            AR.renderer.setSize(w, h);
         });
         arController.loadMarker('./lib/data/patt.kanji.txt', function(markerId) {
             var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
