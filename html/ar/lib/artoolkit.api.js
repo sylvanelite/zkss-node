@@ -1116,15 +1116,8 @@
 		obj.onSuccess = function() {
 			new ARCameraParam(cameraParamURL, function() {
 				var arCameraParam = this;
-				var maxSize = Math.max(video.videoWidth, video.videoHeight);
-				var f = maxSize / Math.max(video.videoWidth, video.videoHeight);
-				var w = f * video.videoWidth;
-				var h = f * video.videoHeight;
-				if (video.videoWidth < video.videoHeight) {
-					var tmp = w;
-					w = h;
-					h = tmp;
-				}
+				var w = video.videoWidth;
+				var h = video.videoHeight;
 				var arController = new ARController(w, h, arCameraParam);
 				arController.image = video;
 				if (video.videoWidth < video.videoHeight) {
