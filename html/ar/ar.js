@@ -33,7 +33,7 @@ AR.render = function (){
 AR.loadKanji = function () {
     AR.controller.loadMarker('./lib/data/patt.kanji.txt', function(markerId) {
         var sphere = new THREE.Mesh(
-            new THREE.SphereGeometry( 5, 32, 32 ),
+            new THREE.SphereGeometry( 1, 16, 16 ),
             new THREE.MeshNormalMaterial()
         );
         sphere.position.z = 0.5;
@@ -56,6 +56,31 @@ AR.loadHiro = function () {
         AR.scene.scene.add(markerRoot);
     });
 };
+AR.loadBarcode = function(barcodeNumb){
+    var icosahedron = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(0.7, 1, 1),
+        new THREE.MeshNormalMaterial()
+    );
+    icosahedron.material.shading = THREE.FlatShading;
+    icosahedron.position.z = 0.7;
+    var markerRoot = arController.createThreeBarcodeMarker(barcodeNumb, 1);
+    markerRoot.add(icosahedron);
+    AR["markerRoot"+barcodeNumb] = markerRoot;
+    AR.scene.scene.scene.add(markerRoot);
+};
+AR.loadBarcode2 = function(barcodeNumb){
+    var torus = new THREE.Mesh(
+        new THREE.TorusGeometry(0.3*2.5, 0.2*2.0, 8, 8),
+        new THREE.MeshNormalMaterial()
+    );
+    torus.material.shading = THREE.FlatShading;
+    torus.position.z = 1.25;
+    torus.rotation.x = Math.PI/2;
+    var markerRoot = arController.createThreeBarcodeMarker(barcodeNumb, 1);
+    markerRoot.add(torus);
+    AR["markerRoot"+barcodeNumb] = markerRoot;
+    AR.scene.scene.scene.add(markerRoot);
+};
 AR.init = function () {
     var getMediaSuccess = function (arScene, arController, arCamera){
         AR.scene = arScene;
@@ -76,7 +101,8 @@ AR.init = function () {
 			renderer.setSize(w,h);
 		}
         $("body").append(AR.renderer.domElement );
-        AR.loadKanji();
+        AR.loadBarcode2(5);
+        AR.loadBarcode(20);
         AR.render();
     };
     var videoSuccess = function (video,stream) {
