@@ -16,11 +16,11 @@ AR.init = function () {
         AR.controller = arController;
         AR.camera = arCamera;
         console.log(arScene,arController,arCamera);
-        AR.renderer.setSize(AR.controller.image.videoWidth, AR.controller.image.videoHeight);
         //arController.debugSetup();
         arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
         var renderer = new THREE.WebGLRenderer();
         AR.renderer = renderer;
+        AR.renderer.setSize(AR.controller.image.videoWidth, AR.controller.image.videoHeight);
         $("body").append(AR.renderer.domElement );
         var cube = new THREE.Mesh(
             new THREE.BoxGeometry(1,1,1),
