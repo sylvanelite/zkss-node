@@ -28,17 +28,7 @@
 		var id;
 		var w = width, h = height;
 
-		this.orientation = 'portrait';
-
 		this.listeners = {};
-
-		if (typeof width !== 'number') {
-			var image = width;
-			camera = height;
-			w = image.videoWidth || image.width;
-			h = image.videoHeight || image.height;
-			this.image = image;
-		}
 
 		this.defaultMarkerWidth = 1;
 		this.patternMarkers = {};
@@ -49,9 +39,6 @@
 		this.canvas.width = w;
 		this.canvas.height = h;
 		this.ctx = this.canvas.getContext('2d');
-
-		this.videoWidth = w;
-		this.videoHeight = h;
 
 		if (typeof camera === 'string') {
 
@@ -408,7 +395,7 @@
 	 * @return	{Float64Array} The dst array.
 	 */
 	ARController.prototype.getTransMatSquareCont = function(markerIndex, markerWidth, previousMarkerTransform, dst) {
-		this.marker_transform_mat.set(previousMarkerTransform)
+		this.marker_transform_mat.set(previousMarkerTransform);
 		artoolkit.getTransMatSquareCont(this.id, markerIndex, markerWidth);
 		dst.set(this.marker_transform_mat);
 		return dst;
@@ -667,7 +654,7 @@
 	*/
 	ARController.prototype.getProcessingImage = function() {
 		return artoolkit.getProcessingImage(this.id);
-	}
+	};
 
 	/**
 		Sets the logging level to use by ARToolKit.
@@ -936,8 +923,8 @@
 	*/
 	ARController.prototype.debugDraw = function() {
 		var debugBuffer = new Uint8ClampedArray(Module.HEAPU8.buffer, this._bwpointer, this.framesize);
-		var id = new ImageData(debugBuffer, this.canvas.width, this.canvas.height)
-		this.ctx.putImageData(id, 0, 0)
+		var id = new ImageData(debugBuffer, this.canvas.width, this.canvas.height);
+		this.ctx.putImageData(id, 0, 0);
 
 		var marker_num = this.getMarkerNum();
 		for (var i=0; i<marker_num; i++) {
@@ -960,7 +947,7 @@
 		this.camera_mat = new Float64Array(Module.HEAPU8.buffer, params.camera, 16);
 		this.marker_transform_mat = new Float64Array(Module.HEAPU8.buffer, params.transform, 12);
 
-		this.setProjectionNearPlane(0.1)
+		this.setProjectionNearPlane(0.1);
 		this.setProjectionFarPlane(1000);
 
 		var self = this;
@@ -981,15 +968,7 @@
 		}
 
 		this.ctx.save();
-
-		if (this.orientation === 'portrait') {
-			this.ctx.translate(this.canvas.width, 0);
-			this.ctx.rotate(Math.PI/2);
-			this.ctx.drawImage(image, 0, 0, this.canvas.height, this.canvas.width); // draw video
-		} else {
-			this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height); // draw video
-		}
-
+		this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height); // draw video
 		this.ctx.restore();
 
 		var imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
@@ -1008,32 +987,32 @@
 		var ctx = this.ctx;
 		ctx.strokeStyle = 'red';
 
-		ctx.beginPath()
-		ctx.moveTo(vertex[0][0], vertex[0][1])
-		ctx.lineTo(vertex[1][0], vertex[1][1])
+		ctx.beginPath();
+		ctx.moveTo(vertex[0][0], vertex[0][1]);
+		ctx.lineTo(vertex[1][0], vertex[1][1]);
 		ctx.stroke();
 
-		ctx.beginPath()
-		ctx.moveTo(vertex[2][0], vertex[2][1])
-		ctx.lineTo(vertex[3][0], vertex[3][1])
-		ctx.stroke()
+		ctx.beginPath();
+		ctx.moveTo(vertex[2][0], vertex[2][1]);
+		ctx.lineTo(vertex[3][0], vertex[3][1]);
+		ctx.stroke();
 
 		ctx.strokeStyle = 'green';
-		ctx.beginPath()
-		ctx.lineTo(vertex[1][0], vertex[1][1])
-		ctx.lineTo(vertex[2][0], vertex[2][1])
+		ctx.beginPath();
+		ctx.lineTo(vertex[1][0], vertex[1][1]);
+		ctx.lineTo(vertex[2][0], vertex[2][1]);
 		ctx.stroke();
 
-		ctx.beginPath()
-		ctx.moveTo(vertex[3][0], vertex[3][1])
-		ctx.lineTo(vertex[0][0], vertex[0][1])
+		ctx.beginPath();
+		ctx.moveTo(vertex[3][0], vertex[3][1]);
+		ctx.lineTo(vertex[0][0], vertex[0][1]);
 		ctx.stroke();
 
-		pos = marker.pos
-		ctx.beginPath()
-		ctx.arc(pos[0], pos[1], 8, 0, Math.PI * 2)
-		ctx.fillStyle = 'red'
-		ctx.fill()
+		pos = marker.pos;
+		ctx.beginPath();
+		ctx.arc(pos[0], pos[1], 8, 0, Math.PI * 2);
+		ctx.fillStyle = 'red';
+		ctx.fill();
 	};
 
 
@@ -1116,9 +1095,7 @@
 		obj.onSuccess = function() {
 			new ARCameraParam(cameraParamURL, function() {
 				var arCameraParam = this;
-				var w = video.videoWidth;
-				var h = video.videoHeight;
-				var arController = new ARController(w, h, arCameraParam);
+				var arController = new ARController(video.videoWidth, video.videoHeight, arCameraParam);
 				arController.image = video;
 				onSuccess(arController, arCameraParam);
 			}, function(err) {
