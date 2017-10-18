@@ -1,5 +1,19 @@
 
 var AR = {};
+AR.toScreenPosition = function(object){
+    var camera = AR.scene.camera;
+    var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
+    var widthHalf = width / 2, heightHalf = height / 2;
+    var pos = new THREE.Vector3();
+    pos = pos.setFromMatrixPosition(object.matrixWorld);
+    pos.project(camera);
+    
+    pos.x = (pos.x * widthHalf) + widthHalf;
+    pos.y = - (pos.y * heightHalf) + heightHalf;
+    pos.z = 0;
+    //messed up because rotation on canv...?
+    return pos;
+};
 AR.beginLoad = function (){
     if (window.ARController && ARController.getUserMediaThreeScene) {
         AR.init();
@@ -7,6 +21,12 @@ AR.beginLoad = function (){
 };
 AR.render = function (){
     AR.scene.process();
+    if(AR.markerRoot && AR.markerRootK &&
+       AR.markerRoot.visible && AR.markerRootK.visible){
+        var coord1 = AR.toScreenPosition(AR.markerRoot);
+        var coord2 = AR.toScreenPosition(AR.markerRootK);
+        console.log(coord1,coord2);
+    }
     AR.scene.renderOn(AR.renderer);
     requestAnimationFrame(AR.render);
 };
@@ -17,7 +37,7 @@ AR.init = function () {
         AR.camera = arCamera;
         console.log(arScene,arController,arCamera);
         //arController.debugSetup();
-        arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
+        arController.setPatternDetectionMode(artoolkit.AR_MATRIX_CODE_DETECTION);
         var renderer = new THREE.WebGLRenderer();
         AR.renderer = renderer;
 		var w = AR.scene.video.videoWidth;
