@@ -27,8 +27,8 @@ AR.render = function (){
         var m1=AR.markerRoots[0];
         var m2=AR.markerRoots[1];
         if(m1.visible && m1.visible){
-            var coord1 = AR.toScreenPosition();
-            var coord2 = AR.toScreenPosition(AR.markerRoots[1]);
+            var coord1 = AR.toScreenPosition(m1);
+            var coord2 = AR.toScreenPosition(m2);
             console.log(coord1,coord2);
         }
     }
