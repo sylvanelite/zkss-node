@@ -63,7 +63,7 @@ AR.loadBarcode = function(barcodeNumb){
     );
     icosahedron.material.shading = THREE.FlatShading;
     icosahedron.position.z = 0.7;
-    var markerRoot = arController.createThreeBarcodeMarker(barcodeNumb, 1);
+    var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     markerRoot.add(icosahedron);
     AR["markerRoot"+barcodeNumb] = markerRoot;
     AR.scene.scene.scene.add(markerRoot);
@@ -76,7 +76,7 @@ AR.loadBarcode2 = function(barcodeNumb){
     torus.material.shading = THREE.FlatShading;
     torus.position.z = 1.25;
     torus.rotation.x = Math.PI/2;
-    var markerRoot = arController.createThreeBarcodeMarker(barcodeNumb, 1);
+    var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     markerRoot.add(torus);
     AR["markerRoot"+barcodeNumb] = markerRoot;
     AR.scene.scene.scene.add(markerRoot);
