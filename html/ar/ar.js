@@ -30,6 +30,32 @@ AR.render = function (){
     AR.scene.renderOn(AR.renderer);
     requestAnimationFrame(AR.render);
 };
+AR.loadKanji = function () {
+    AR.controller.loadMarker('./lib/data/patt.kanji.txt', function(markerId) {
+        var sphere = new THREE.Mesh(
+            new THREE.SphereGeometry( 5, 32, 32 ),
+            new THREE.MeshNormalMaterial()
+        );
+        sphere.position.z = 0.5;
+        var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
+        markerRoot.add(sphere);
+        AR.markerRootK = markerRoot;
+        AR.scene.scene.add(markerRoot);
+    });
+};
+AR.loadHiro = function () {
+    AR.controller.loadMarker('./lib/data/patt.hiro.txt', function(markerId) {
+        var cube = new THREE.Mesh(
+            new THREE.BoxGeometry(1,1,1),
+            new THREE.MeshNormalMaterial()
+        );
+        cube.position.z = 0.5;
+        var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
+        markerRoot.add(cube);
+        AR.markerRoot = markerRoot;
+        AR.scene.scene.add(markerRoot);
+    });
+};
 AR.init = function () {
     var getMediaSuccess = function (arScene, arController, arCamera){
         AR.scene = arScene;
@@ -50,31 +76,7 @@ AR.init = function () {
 			renderer.setSize(w,h);
 		}
         $("body").append(AR.renderer.domElement );
-        var cube = new THREE.Mesh(
-            new THREE.BoxGeometry(1,1,1),
-            new THREE.MeshNormalMaterial()
-        );
-        cube.position.z = 0.5;
-        var sphere = new THREE.Mesh(
-            new THREE.SphereGeometry( 5, 32, 32 ),
-            new THREE.MeshNormalMaterial()
-        );
-        sphere.position.z = 0.5;
-        arController.loadMarker('./lib/data/patt.hiro.txt', function(markerId) {
-            var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
-            markerRoot.add(cube);
-            AR.markerRoot = markerRoot;
-            AR.scene.scene.add(markerRoot);
-        });
-        arController.loadMarker('./lib/data/patt.kanji.txt', function(markerId) {
-            var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
-            markerRoot.add(sphere);
-            AR.markerRootK = markerRoot;
-            AR.scene.scene.add(markerRoot);
-        });
-        //AR.markerRootK.children[0].getWorldPosition()
-
-        
+        AR.loadHiro ();
         AR.render();
     };
     var videoSuccess = function (video,stream) {
