@@ -1,5 +1,7 @@
 
-var AR = {};
+var AR = {
+    markerRoots:[]
+};
 AR.toScreenPosition = function(object){
     var camera = AR.scene.camera;
     var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
@@ -21,10 +23,9 @@ AR.beginLoad = function (){
 };
 AR.render = function (){
     AR.scene.process();
-    if(AR.markerRoot && AR.markerRootK &&
-       AR.markerRoot.visible && AR.markerRootK.visible){
-        var coord1 = AR.toScreenPosition(AR.markerRoot);
-        var coord2 = AR.toScreenPosition(AR.markerRootK);
+    if(AR.markerRoots.length>1){
+        var coord1 = AR.toScreenPosition(AR.markerRoots[0]);
+        var coord2 = AR.toScreenPosition(AR.markerRoots[1]);
         console.log(coord1,coord2);
     }
     AR.scene.renderOn(AR.renderer);
@@ -39,7 +40,7 @@ AR.loadKanji = function () {
         sphere.position.z = 0.5;
         var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
         markerRoot.add(sphere);
-        AR.markerRootK = markerRoot;
+        AR.markerRoots.push(markerRoot);
         AR.scene.scene.add(markerRoot);
     });
 };
@@ -52,7 +53,7 @@ AR.loadHiro = function () {
         cube.position.z = 0.5;
         var markerRoot = AR.controller.createThreeMarker(markerId, 3);//2nd param = marker width
         markerRoot.add(cube);
-        AR.markerRoot = markerRoot;
+        AR.markerRoots.push(markerRoot);
         AR.scene.scene.add(markerRoot);
     });
 };
@@ -65,7 +66,7 @@ AR.loadBarcode = function(barcodeNumb){
     icosahedron.position.z = 0.7;
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     markerRoot.add(icosahedron);
-    AR["markerRoot"+barcodeNumb] = markerRoot;
+    AR.markerRoots.push(markerRoot);
     AR.scene.scene.add(markerRoot);
 };
 AR.loadBarcode2 = function(barcodeNumb){
@@ -78,7 +79,7 @@ AR.loadBarcode2 = function(barcodeNumb){
     torus.rotation.x = Math.PI/2;
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     markerRoot.add(torus);
-    AR["markerRoot"+barcodeNumb] = markerRoot;
+    AR.markerRoots.push(markerRoot);
     AR.scene.scene.add(markerRoot);
 };
 AR.init = function () {
