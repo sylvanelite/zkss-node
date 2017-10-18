@@ -66,7 +66,7 @@ AR.loadBarcode = function(barcodeNumb){
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     markerRoot.add(icosahedron);
     AR["markerRoot"+barcodeNumb] = markerRoot;
-    AR.scene.scene.scene.add(markerRoot);
+    AR.scene.scene.add(markerRoot);
 };
 AR.loadBarcode2 = function(barcodeNumb){
     var torus = new THREE.Mesh(
@@ -79,7 +79,7 @@ AR.loadBarcode2 = function(barcodeNumb){
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     markerRoot.add(torus);
     AR["markerRoot"+barcodeNumb] = markerRoot;
-    AR.scene.scene.scene.add(markerRoot);
+    AR.scene.scene.add(markerRoot);
 };
 AR.init = function () {
     var getMediaSuccess = function (arScene, arController, arCamera){
