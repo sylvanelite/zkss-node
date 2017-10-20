@@ -26,7 +26,7 @@ AR.render = function (){
     if(AR.markerRoots.length>1){
         var m1=AR.markerRoots[0];
         var m2=AR.markerRoots[1];
-        if(m1.visible && m1.visible){
+        if(m1.visible && m2.visible){
             var coord1 = AR.toScreenPosition(m1);
             var coord2 = AR.toScreenPosition(m2);
             console.log(coord1,coord2);
