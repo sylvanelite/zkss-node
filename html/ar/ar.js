@@ -32,10 +32,10 @@ AR.render = function (){
             var coord2 = AR.toScreenPosition(m2);
             console.log(coord1,coord2);
             if(AR.capturedFrames.length<5){
-                var x1 = Math.Min(coord1.x,coord2.x);
-                var y1 = Math.Min(coord1.x,coord2.y);
-                var x2 = Math.Max(coord1.x,coord2.x);
-                var y2 = Math.Max(coord1.x,coord2.y);
+                var x1 = Math.min(coord1.x,coord2.x);
+                var y1 = Math.min(coord1.x,coord2.y);
+                var x2 = Math.max(coord1.x,coord2.x);
+                var y2 = Math.max(coord1.x,coord2.y);
                 var w = x2-x1;
                 var h = y2-y1;
                 var cnv = AR.renderer.domElement;
