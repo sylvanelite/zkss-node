@@ -35,9 +35,9 @@ AR.render = function (){
                !isNaN(coord2.x)&&!isNaN(coord2.y) &&
                 AR.capturedFrames.length<5){
                 var x1 = Math.min(coord1.x,coord2.x);
-                var y1 = Math.min(coord1.x,coord2.y);
+                var y1 = Math.min(coord1.y,coord2.y);
                 var x2 = Math.max(coord1.x,coord2.x);
-                var y2 = Math.max(coord1.x,coord2.y);
+                var y2 = Math.max(coord1.y,coord2.y);
                 var w = x2-x1;
                 var h = y2-y1;
                 var cnv = AR.controller.canvas;
