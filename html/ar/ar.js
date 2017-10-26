@@ -1,6 +1,6 @@
 
 var AR = {
-    markerRoots:[]
+    markerRoots:[],
     capturedFrames:[]
 };
 AR.toScreenPosition = function(object){
