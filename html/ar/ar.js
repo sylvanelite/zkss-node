@@ -1,6 +1,7 @@
 
 var AR = {
     markerRoots:[]
+    capturedFrames:[]
 };
 AR.toScreenPosition = function(object){
     var camera = AR.scene.camera;
@@ -30,6 +31,22 @@ AR.render = function (){
             var coord1 = AR.toScreenPosition(m1);
             var coord2 = AR.toScreenPosition(m2);
             console.log(coord1,coord2);
+            if(AR.capturedFrames.length<5){
+                var x1 = Math.Min(coord1.x,coord2.x);
+                var y1 = Math.Min(coord1.x,coord2.y);
+                var x2 = Math.Max(coord1.x,coord2.x);
+                var y2 = Math.Max(coord1.x,coord2.y);
+                var w = x2-x1;
+                var h = y2-y1;
+                var cnv = AR.renderer.domElement;
+                var capCnv = document.createElement('canvas');
+                capCnv.width = w;
+                capCnv.height = h;
+                var capCtx=capCnv.getContext("2d");
+                var cnvCtc=cnv.getContext("2d");
+                var imgData=cnvCtc.getImageData(x1,y1,w,h);
+                capCtx.putImageData(imgData,0,0);
+            }
         }
     }
     AR.scene.renderOn(AR.renderer);
