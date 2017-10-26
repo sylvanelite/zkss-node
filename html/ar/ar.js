@@ -38,13 +38,13 @@ AR.render = function (){
                 var y2 = Math.max(coord1.x,coord2.y);
                 var w = x2-x1;
                 var h = y2-y1;
-                var cnv = AR.renderer.domElement;
+                var cnv = AR.controller.canvas;
                 var capCnv = document.createElement('canvas');
                 capCnv.width = w;
                 capCnv.height = h;
                 var capCtx=capCnv.getContext("2d");
-                var cnvCtc=cnv.getContext("2d");
-                var imgData=cnvCtc.getImageData(x1,y1,w,h);
+                var cnvCtx=cnv.getContext("2d");
+                var imgData=cnvCtx.getImageData(x1,y1,w,h);
                 capCtx.putImageData(imgData,0,0);
             }
         }
