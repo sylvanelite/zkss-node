@@ -48,6 +48,7 @@ AR.render = function (){
                 var cnvCtx=cnv.getContext("2d");
                 var imgData=cnvCtx.getImageData(x1,y1,w,h);
                 capCtx.putImageData(imgData,0,0);
+                AR.capturedFrames.push(capCnv);
             }
         }
     }
