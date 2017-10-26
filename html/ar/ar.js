@@ -31,7 +31,9 @@ AR.render = function (){
             var coord1 = AR.toScreenPosition(m1);
             var coord2 = AR.toScreenPosition(m2);
             console.log(coord1,coord2);
-            if(AR.capturedFrames.length<5){
+            if(!isNaN(coord1.x)&&!isNaN(coord1.y)&&
+               !isNaN(coord2.x)&&!isNaN(coord2.y) &&
+                AR.capturedFrames.length<5){
                 var x1 = Math.min(coord1.x,coord2.x);
                 var y1 = Math.min(coord1.x,coord2.y);
                 var x2 = Math.max(coord1.x,coord2.x);
