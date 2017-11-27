@@ -76,33 +76,44 @@ AR.render = function (){
     AR.scene.renderOn(AR.renderer);
     requestAnimationFrame(AR.render);
 };
-AR.cast = function () {
+
+AR.toScreenPosition = function(object){
+    var camera = AR.scene.camera;
+    var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
+    var widthHalf = width / 2, heightHalf = height / 2;
+    var pos = new THREE.Vector3();
+    pos = pos.setFromMatrixPosition(object.matrixWorld);
+    pos.project(camera);
     
-    var raycaster = new THREE.Raycaster();
-    var point = new THREE.Vector2();
+    pos.x = (pos.x * widthHalf) + widthHalf;
+    pos.y = - (pos.y * heightHalf) + heightHalf;
+    pos.z = 0;
+    //messed up because rotation on canv...?
+    return pos;
+};
+AR.cast = function () {
     var cnv = AR.controller.canvas;
     var cnvCtx=cnv.getContext("2d");
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
     var data=imgData.data;
-    for(var i=0; i<data.length; i+=4) {
-        var r = data[i];
-        var g = data[i+1];
-        var b = data[i+2];
-        var a = data[i+3];
-        if(r<100&&g<100&&b<100&&a===255){
-            var idx = i/4;
-            var x = idx % cnv.width;
-            var y = idx/cnv.width;
-            point.x = x;
-            point.y = y;
-            raycaster.setFromCamera( point, AR.scene.camera );
-            var intersects = raycaster.intersectObjects( AR.voxelGroup.children);
-            if ( intersects.length > 0 ) {
-                for(var c=0;c<intersects.length;c+=1){
-                    intersects[c].visible = false;
+    var size = AR.voxels.length;
+    for(var i=0;i<size;i+=1){
+        console.log("i: "+i);
+        for(var j=0;j<size;j+=1){
+        console.log("j: "+j);
+            for(var k=0;k<size;k+=1){
+                var vox = AR.voxels[i][j][k];
+                var pos = AR.toScreenPosition(vox);
+                //p.x = index / 3;
+                //p.y = index % 3;
+                //int oneDindex = (row * length_of_row) + column;
+                var idx = (pos.x*cnv.width)+pos.y;
+                idx = idx*4;
+                var colour = {r:data[idx],g:data[idx+1],b:idx[data+2]};
+                if(colour.r<128){
+                    vox.visible=false;
                 }
             }
-
         }
     }
 };
