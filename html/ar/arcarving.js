@@ -115,9 +115,9 @@ AR.generateVoxels = function (size){
                     new THREE.MeshNormalMaterial()
                 );
                 mesh.material.shading = THREE.FlatShading;
-                mesh.position.z = i*scale+(size*scale)/2;
-                mesh.position.x = j*scale+(size*scale)/2;
-                mesh.position.y = k*scale+(size*scale)/2;
+                mesh.position.z = i;
+                mesh.position.x = j*scale-(size*scale)/2;
+                mesh.position.y = k*scale-(size*scale)/2;
                 y.push(mesh);
                 AR.voxelGroup.add(mesh);
             }
