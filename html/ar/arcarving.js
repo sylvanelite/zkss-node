@@ -43,7 +43,8 @@ then at each screenshot step, ray cast from camera into grid and delete voxels w
 */
 
 var AR = {
-    markerRoots:[]
+    markerRoots:[],
+    voxels:[]
 };
 AR.toScreenPosition = function(object){
     var camera = AR.scene.camera;
@@ -70,9 +71,6 @@ AR.render = function (){
         var m1=AR.markerRoots[0];
         var m2=AR.markerRoots[1];
         if(m1.visible && m2.visible){
-            AR.voxelGroup.position.x=m1.getWorldPosition().x;
-            AR.voxelGroup.position.y=m1.getWorldPosition().y;
-            AR.voxelGroup.position.z=m1.getWorldPosition().z;
         }
     }
     AR.scene.renderOn(AR.renderer);
@@ -96,6 +94,8 @@ AR.loadBarcode = function(barcodeNumb){
     }
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     markerRoot.add(mesh);
+    AR.generateVoxels(10);
+    markerRoot.add(AR.voxelGroup);
     AR.markerRoots.push(markerRoot);
     AR.scene.scene.add(markerRoot);
 };
@@ -113,7 +113,7 @@ AR.generateVoxels = function (size){
                 );
                 mesh.material.shading = THREE.FlatShading;
                 mesh.position.z = i;
-                mesh.position.x = j;
+                mesh.position.x = j-size;
                 mesh.position.y = k;
                 y.push(mesh);
                 AR.voxelGroup.add(mesh);
@@ -144,7 +144,6 @@ AR.init = function () {
         $("body").append(AR.renderer.domElement );
         AR.loadBarcode(5);
         AR.loadBarcode(20);
-        AR.generateVoxels(10);
         AR.render();
     };
     var videoSuccess = function (video,stream) {
