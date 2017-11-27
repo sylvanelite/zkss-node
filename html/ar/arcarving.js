@@ -69,35 +69,47 @@ AR.render = function (){
     AR.scene.process();
     if(AR.markerRoots.length>1){
         var m1=AR.markerRoots[0];
-        var m2=AR.markerRoots[1];
-        if(m1.visible && m2.visible){
+        if(m1.visible){
+            //TODO: Cast?
         }
     }
     AR.scene.renderOn(AR.renderer);
     requestAnimationFrame(AR.render);
 };
+AR.cast = function () {
+    
+    var raycaster = new THREE.Raycaster();
+    var point = new THREE.Vector2();
+    var cnv = AR.controller.canvas;
+    var cnvCtx=cnv.getContext("2d");
+    var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
+    var data=imgData.data;
+    for(var i=0; i<data.length; i+=4) {
+        var r = data[i];
+        var g = data[i+1];
+        var b = data[i+2];
+        var a = data[i+3];
+        if(r<100&&g<100&&b<100&&a===255){
+            var idx = i/4;
+            var x = idx % cnv.width;
+            var y = idx/cnv.width;
+            point.x = x;
+            point.y = y;
+            raycaster.setFromCamera( point, AR.scene.camera );
+            var intersects = raycaster.intersectObjects( AR.voxelGroup.children);
+            if ( intersects.length > 0 ) {
+                for(var c=0;c<intersects.length;c+=1){
+                    intersects[c].visible = false;
+                }
+            }
+
+        }
+    }
+};
 AR.loadBarcode = function(barcodeNumb){
-    var mesh = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(0.7, 1, 1),
-        new THREE.MeshNormalMaterial()
-    );
-    mesh.material.shading = THREE.FlatShading;
-    mesh.position.z = 0.7;
-    if(barcodeNumb==5){
-        mesh = new THREE.Mesh(
-            new THREE.TorusGeometry(0.3*2.5, 0.2*2.0, 8, 8),
-            new THREE.MeshNormalMaterial()
-        );
-        mesh.material.shading = THREE.FlatShading;
-        mesh.position.z = 1.25;
-        mesh.rotation.x = Math.PI/2;
-    }
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
-    markerRoot.add(mesh);
-    if(barcodeNumb===5){
-        AR.generateVoxels(10);
-        markerRoot.add(AR.voxelGroup);
-    }
+    AR.generateVoxels(10);
+    markerRoot.add(AR.voxelGroup);
     AR.markerRoots.push(markerRoot);
     AR.scene.scene.add(markerRoot);
 };
@@ -146,7 +158,6 @@ AR.init = function () {
 		}
         $("body").append(AR.renderer.domElement );
         AR.loadBarcode(5);
-        AR.loadBarcode(20);
         AR.render();
     };
     var videoSuccess = function (video,stream) {
