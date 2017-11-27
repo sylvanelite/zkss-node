@@ -70,9 +70,9 @@ AR.render = function (){
         var m1=AR.markerRoots[0];
         var m2=AR.markerRoots[1];
         if(m1.visible && m2.visible){
-            AR.voxelGroup.position.x=m1.position.x;
-            AR.voxelGroup.position.y=m1.position.y;
-            AR.voxelGroup.position.z=m1.position.z;
+            AR.voxelGroup.position.x=m1.getWorldPosition().x;
+            AR.voxelGroup.position.y=m1.getWorldPosition().y;
+            AR.voxelGroup.position.z=m1.getWorldPosition().z;
         }
     }
     AR.scene.renderOn(AR.renderer);
@@ -122,6 +122,7 @@ AR.generateVoxels = function (size){
         }
         AR.voxels.push(x);
     }
+    AR.scene.scene.add(AR.voxelGroup);
 };
 AR.init = function () {
     var getMediaSuccess = function (arScene, arController, arCamera){
@@ -143,7 +144,7 @@ AR.init = function () {
         $("body").append(AR.renderer.domElement );
         AR.loadBarcode(5);
         AR.loadBarcode(20);
-        AR.generateVoxels();
+        AR.generateVoxels(10);
         AR.render();
     };
     var videoSuccess = function (video,stream) {
