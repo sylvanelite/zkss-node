@@ -94,8 +94,10 @@ AR.loadBarcode = function(barcodeNumb){
     }
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     markerRoot.add(mesh);
-    AR.generateVoxels(10);
-    markerRoot.add(AR.voxelGroup);
+    if(barcodeNumb===5){
+        AR.generateVoxels(10);
+        markerRoot.add(AR.voxelGroup);
+    }
     AR.markerRoots.push(markerRoot);
     AR.scene.scene.add(markerRoot);
 };
@@ -108,7 +110,7 @@ AR.generateVoxels = function (size){
             var y=[];
             for(var k=0;k<size;k+=1){
                 var mesh = new THREE.Mesh(
-                    new THREE.BoxGeometry(1, 1, 1),
+                    new THREE.BoxGeometry(0.1, 0.1, 0.1),
                     new THREE.MeshNormalMaterial()
                 );
                 mesh.material.shading = THREE.FlatShading;
