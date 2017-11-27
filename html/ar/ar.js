@@ -34,6 +34,12 @@ AR.render = function (){
             if(!isNaN(coord1.x)&&!isNaN(coord1.y)&&
                !isNaN(coord2.x)&&!isNaN(coord2.y) &&
                 AR.capturedFrames.length<5){
+                //var a=AR.markerRoots[0].getWorldRotation();console.log(a._x*57.2958,a._y*57.2958,a._z*57.2958);
+/*
+  window.addEventListener('devicemotion', function () {
+        AR.rot = event;
+    }, true);
+*/
                 var x1 = Math.min(coord1.x,coord2.x);
                 var y1 = Math.min(coord1.y,coord2.y);
                 var x2 = Math.max(coord1.x,coord2.x);
