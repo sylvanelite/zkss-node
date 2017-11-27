@@ -102,7 +102,7 @@ AR.loadBarcode = function(barcodeNumb){
     AR.scene.scene.add(markerRoot);
 };
 AR.generateVoxels = function (size){
-    var scale = 0.1;
+    var scale = 0.25;
     AR.voxels=[];
     AR.voxelGroup = new THREE.Group();
     for(var i=0;i<size;i+=1){
@@ -115,9 +115,9 @@ AR.generateVoxels = function (size){
                     new THREE.MeshNormalMaterial()
                 );
                 mesh.material.shading = THREE.FlatShading;
-                mesh.position.z = i*scale;
-                mesh.position.x = j*scale;
-                mesh.position.y = k*scale;
+                mesh.position.z = i*scale+(size*scale)/2;
+                mesh.position.x = j*scale+(size*scale)/2;
+                mesh.position.y = k*scale+(size*scale)/2;
                 y.push(mesh);
                 AR.voxelGroup.add(mesh);
             }
