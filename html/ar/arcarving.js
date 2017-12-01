@@ -70,7 +70,7 @@ AR.render = function (){
     if(AR.markerRoots.length>1){
         var m1=AR.markerRoots[0];
         if(m1.visible){
-            //TODO: Cast?
+            //TODO: Call cast(), at the moment call it via console
         }
     }
     AR.scene.renderOn(AR.renderer);
@@ -97,13 +97,21 @@ AR.cast = function () {
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
     var data=imgData.data;
     var size = AR.voxels.length;
+    var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
+    var widthHalf = width / 2, heightHalf = height / 2;
+    pos = pos.setFromMatrixPosition(object.matrixWorld);
+    var pos = new THREE.Vector3();
+    var camera = AR.scene.camera;
     for(var i=0;i<size;i+=1){
-        console.log("i: "+i);
         for(var j=0;j<size;j+=1){
-        console.log("j: "+j);
             for(var k=0;k<size;k+=1){
                 var vox = AR.voxels[i][j][k];
-                var pos = AR.toScreenPosition(vox);
+                //var pos = AR.toScreenPosition(vox);
+                pos = pos.setFromMatrixPosition(vox);
+                pos.project(camera);
+                pos.x = (pos.x * widthHalf) + widthHalf;
+                pos.y = - (pos.y * heightHalf) + heightHalf;
+                pos.z = 0;
                 //p.x = index / 3;
                 //p.y = index % 3;
                 //int oneDindex = (row * length_of_row) + column;
