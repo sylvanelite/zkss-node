@@ -97,30 +97,23 @@ AR.cast = function () {
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
     var data=imgData.data;
     var size = AR.voxels.length;
-    var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
-    var widthHalf = width / 2, heightHalf = height / 2;
-    var pos = new THREE.Vector3();
-    var camera = AR.scene.camera;
+    var res = [];
     for(var i=0;i<size;i+=1){
         for(var j=0;j<size;j+=1){
             console.log(i+" "+j);
             for(var k=0;k<size;k+=1){
                 var vox = AR.voxels[i][j][k];
-                //var pos = AR.toScreenPosition(vox);
-                pos = pos.setFromMatrixPosition(vox.matrixWorld);
-                pos.project(camera);
-                pos.x = (pos.x * widthHalf) + widthHalf;
-                pos.y = - (pos.y * heightHalf) + heightHalf;
-                pos.z = 0;
+                var pos = AR.toScreenPosition(vox);
                 //p.x = index / 3;
                 //p.y = index % 3;
                 //int oneDindex = (row * length_of_row) + column;
                 var idx = (pos.x*cnv.width)+pos.y;
                 idx = idx*4;
-                var colour = {r:data[idx],g:data[idx+1],b:idx[data+2]};
+                var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
                 if(colour.r<128){
                     vox.visible=false;
                 }
+                res.push({i:i,j:j,k:k,idx:idx,x:pos.x,y:pos.y});
             }
         }
     }
