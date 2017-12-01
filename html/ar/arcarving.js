@@ -99,11 +99,11 @@ AR.cast = function () {
     var size = AR.voxels.length;
     var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
     var widthHalf = width / 2, heightHalf = height / 2;
-    pos = pos.setFromMatrixPosition(object.matrixWorld);
     var pos = new THREE.Vector3();
     var camera = AR.scene.camera;
     for(var i=0;i<size;i+=1){
         for(var j=0;j<size;j+=1){
+            console.log(i+" "+j);
             for(var k=0;k<size;k+=1){
                 var vox = AR.voxels[i][j][k];
                 //var pos = AR.toScreenPosition(vox);
