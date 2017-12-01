@@ -107,7 +107,7 @@ AR.cast = function () {
             for(var k=0;k<size;k+=1){
                 var vox = AR.voxels[i][j][k];
                 //var pos = AR.toScreenPosition(vox);
-                pos = pos.setFromMatrixPosition(vox);
+                pos = pos.setFromMatrixPosition(vox.matrixWorld);
                 pos.project(camera);
                 pos.x = (pos.x * widthHalf) + widthHalf;
                 pos.y = - (pos.y * heightHalf) + heightHalf;
