@@ -111,7 +111,20 @@ AR.capture = function () {
         AR.captureImages = [];
     }
     result.projectionMatrix = AR.controller.getCameraMatrix();
+    result.transformMatrix = AR.controller.getTransformationMatrix();
     result.markerTransformMatrix = AR.controller.getMarkerTransformationMatrix();
+    var threeTransformMat = new THREE.Matrix4();
+    threeTransformMat=threeTransformMat.set(result.transformMatrix[0],result.transformMatrix[1],result.transformMatrix[2],result.transformMatrix[3],
+        result.transformMatrix[4],result.transformMatrix[5],result.transformMatrix[6],result.transformMatrix[7],
+        result.transformMatrix[8],result.transformMatrix[9],result.transformMatrix[10],result.transformMatrix[11],
+        result.transformMatrix[12],result.transformMatrix[13],result.transformMatrix[14],result.transformMatrix[15]);
+    var threeProjMat = new THREE.Matrix4();
+    threeProjMat=threeProjMat.set(result.projectionMatrix[0],result.projectionMatrix[1],result.projectionMatrix[2],result.projectionMatrix[3],
+        result.projectionMatrix[4],result.projectionMatrix[5],result.projectionMatrix[6],result.projectionMatrix[7],
+        result.projectionMatrix[8],result.projectionMatrix[9],result.projectionMatrix[10],result.projectionMatrix[11],
+        result.projectionMatrix[12],result.projectionMatrix[13],result.projectionMatrix[14],result.projectionMatrix[15]);
+    var threeResult = threeTransformMat.multiply(threeProjMat);
+    result.multiplyMatrix = threeResult.elements;
     AR.captures.push(result);
     var cnv = AR.controller.canvas;
     AR.captureImages.push(cnv.toDataURL());
@@ -119,7 +132,7 @@ AR.capture = function () {
 };
 AR.loadBarcode = function(barcodeNumb){
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
-    AR.generateVoxels(10);
+    AR.generateVoxels(1);
     markerRoot.add(AR.voxelGroup);
     AR.markerRoots.push(markerRoot);
     AR.scene.scene.add(markerRoot);
