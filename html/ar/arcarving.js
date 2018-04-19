@@ -103,6 +103,18 @@ AR.cast = function () {
         }
     }
 };
+
+AR.capture = function () {
+    var result = {};
+    if(!AR.hasOwnProperty("captures")){
+        AR.captures = [];
+    }
+    result.projectionMatrix = AR.controller.gerCameraMatrix();
+    result.markerTransformMatrix = AR.controller.getMarkerTransformationMatrix();
+    var cnv = AR.controller.canvas;
+    result.img = cnv.toDataUrl();
+    AR.captures.push(result);
+};
 AR.loadBarcode = function(barcodeNumb){
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     AR.generateVoxels(10);
