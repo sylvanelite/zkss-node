@@ -115,6 +115,7 @@ AR.capture = function () {
     AR.captures.push(result);
     var cnv = AR.controller.canvas;
     AR.captureImages.push(cnv.toDataURL());
+    console.log("capture ID: "+(AR.captures.length-1));
 };
 AR.loadBarcode = function(barcodeNumb){
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
@@ -182,6 +183,6 @@ AR.init = function () {
         onVideoSuccess: videoSuccess,
         cameraParam: "./lib/data/camera_para.dat"
     });
-    
+    $("#capture").on("click",AR.capture());
 };
 $(document).ready(AR.beginLoad);
