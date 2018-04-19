@@ -46,20 +46,6 @@ var AR = {
     markerRoots:[],
     voxels:[]
 };
-AR.toScreenPosition = function(object){
-    var camera = AR.scene.camera;
-    var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
-    var widthHalf = width / 2, heightHalf = height / 2;
-    var pos = new THREE.Vector3();
-    pos = pos.setFromMatrixPosition(object.matrixWorld);
-    pos.project(camera);
-    
-    pos.x = (pos.x * widthHalf) + widthHalf;
-    pos.y = - (pos.y * heightHalf) + heightHalf;
-    pos.z = 0;
-    //messed up because rotation on canv...?
-    return pos;
-};
 AR.beginLoad = function (){
     if (window.ARController && ARController.getUserMediaThreeScene) {
         AR.init();
@@ -97,7 +83,6 @@ AR.cast = function () {
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
     var data=imgData.data;
     var size = AR.voxels.length;
-    var res = [];
     for(var i=0;i<size;i+=1){
         for(var j=0;j<size;j+=1){
             console.log(i+" "+j);
@@ -107,13 +92,13 @@ AR.cast = function () {
                 //p.x = index / 3;
                 //p.y = index % 3;
                 //int oneDindex = (row * length_of_row) + column;
-                var idx = (pos.x*cnv.width)+pos.y;
+                var idx = (Math.floor(pos.y)*cnv.width)+Math.floor(pos.x);
                 idx = idx*4;
                 var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
+                if(colour.r===undefined){console.log(pos,idx);}
                 if(colour.r<128){
                     vox.visible=false;
                 }
-                res.push({i:i,j:j,k:k,idx:idx,x:pos.x,y:pos.y});
             }
         }
     }
