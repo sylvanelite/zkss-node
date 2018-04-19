@@ -183,6 +183,6 @@ AR.init = function () {
         onVideoSuccess: videoSuccess,
         cameraParam: "./lib/data/camera_para.dat"
     });
-    $("#capture").on("click",AR.capture());
+    $("#capture").on("click",AR.capture);
 };
 $(document).ready(AR.beginLoad);
