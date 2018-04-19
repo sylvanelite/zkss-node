@@ -109,7 +109,7 @@ AR.capture = function () {
     if(!AR.hasOwnProperty("captures")){
         AR.captures = [];
     }
-    result.projectionMatrix = AR.controller.gerCameraMatrix();
+    result.projectionMatrix = AR.controller.getCameraMatrix();
     result.markerTransformMatrix = AR.controller.getMarkerTransformationMatrix();
     var cnv = AR.controller.canvas;
     result.img = cnv.toDataUrl();
