@@ -43,6 +43,7 @@ then at each screenshot step, ray cast from camera into grid and delete voxels w
 */
 
 var AR = {
+    VOXEL_COUNT:10,
     markerRoots:[],
     voxels:[]
 };
@@ -96,7 +97,7 @@ AR.cast = function () {
                 idx = idx*4;
                 var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
                 if(colour.r===undefined){console.log(pos,idx);}
-                if(colour.r<128){
+                if(colour.g>200){
                     vox.visible=false;
                 }
             }
@@ -129,10 +130,11 @@ AR.capture = function () {
     var cnv = AR.controller.canvas;
     AR.captureImages.push(cnv.toDataURL());
     console.log("capture ID: "+(AR.captures.length-1));
+    AR.cast();
 };
 AR.loadBarcode = function(barcodeNumb){
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
-    AR.generateVoxels(1);
+    AR.generateVoxels(AR.VOXEL_COUNT);
     markerRoot.add(AR.voxelGroup);
     AR.markerRoots.push(markerRoot);
     AR.scene.scene.add(markerRoot);
