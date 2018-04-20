@@ -1,3 +1,28 @@
+/*
+TODO: scale voxels to extend from the marker to the camera
+var mPos = new THREE.Vector3();
+mPos = mPos.setFromMatrixPosition(AR.markerRoots[0].matrixWorld);
+//camera has matrixWorld/position as identity.
+//If it wasn't, the have to use setFromMatrixPosition like above.
+var distToCamera = mPos.distanceTo(AR.scene.camera.position);
+
+
+//do code like this with a flag to run only once
+//and set the scale of the voxels based on camera distance?
+if(AR.markerRoots.length>1){
+    var m1=AR.markerRoots[0];
+    if(m1.visible){
+        //TODO: Call cast(), at the moment call it via console
+    }
+}
+//todo: replace intensive voxels with BSP?
+//https://wiki.unrealengine.com/Basic_Level_Design_BSP_(Unreal_Tournament)
+
+//OR replace with simpler method: when number of voxels is low,
+//replace with progressivly higher number of cubes
+//if each new set of cubes is at a smaller scale, result will be better
+*/
+
 var AR = {
     VOXEL_COUNT:10,
     markerRoots:[],
@@ -10,12 +35,6 @@ AR.beginLoad = function (){
 };
 AR.render = function (){
     AR.scene.process();
-    if(AR.markerRoots.length>1){
-        var m1=AR.markerRoots[0];
-        if(m1.visible){
-            //TODO: Call cast(), at the moment call it via console
-        }
-    }
     AR.scene.renderOn(AR.renderer);
     requestAnimationFrame(AR.render);
 };
@@ -52,7 +71,13 @@ AR.cast = function () {
                 idx = idx*4;
                 var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
                 if(colour.r===undefined){console.log(pos,idx);}
-                if(colour.g>200){
+                if(colour.g>200){//green (backing screen)
+                    vox.visible=false;
+                }
+                if(colour.r>200&&colour.g>200&&colour.b){//white (marker)
+                    vox.visible=false;
+                }
+                if(colour.g<50&&coour.r<50&&colour.b){//black (marker)
                     vox.visible=false;
                 }
             }
