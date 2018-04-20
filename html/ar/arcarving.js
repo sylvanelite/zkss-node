@@ -1,49 +1,5 @@
-/*
-ideas:
-var m = AR.markerRoots[0].matrixWorld
-var i = m.getInverse(m)
-var vec = new THREE.Vector3(0,0,0)
-vec.setFromMatrixPosition(i)
-
-//projection??
-var p = i.multiplyMatrices(i,AR.scene.camera.projectionMatrix)
-
-var vec = new THREE.Vector3(0,0,0)
-vec.setFromMatrixPosition(p
-
-//------
-
-https://pdfs.semanticscholar.org/d039/7b127b0777807295ef8a0b438727fb2c76a6.pdf
-https://github.com/AlexFish89/iPhone-3D-scanner
-
-var K = AR.scene.camera.projectionMatrix
-
-var R = AR.markerRoots[0].getWorldRotation()
-var T = AR.markerRoots[0].getWorldPosition()
-//??
-var P = [k,0]*[R,T
-               0,1]
-
-foreach voxel
-voxHomg = [x,y,z,1](vertical matrix)
-
-var pv = P*voxHomg
-
-var norm = [pv.x/pv.z (this is "u"), pv.y/pv.z (this is "v")](vertial matrix)
-
-
-//---
-
-https://threejs.org/examples/#webgl_interactive_voxelpainter
-
-when getting both AR cards, fill between them with voxels toward the camera
-then at each screenshot step, ray cast from camera into grid and delete voxels with matching colour?
-
-
-*/
-
 var AR = {
-    VOXEL_COUNT:10,
+    VOXEL_COUNT:20,
     markerRoots:[],
     voxels:[]
 };
@@ -86,7 +42,6 @@ AR.cast = function () {
     var size = AR.voxels.length;
     for(var i=0;i<size;i+=1){
         for(var j=0;j<size;j+=1){
-            console.log(i+" "+j);
             for(var k=0;k<size;k+=1){
                 var vox = AR.voxels[i][j][k];
                 var pos = AR.toScreenPosition(vox);
@@ -130,7 +85,6 @@ AR.capture = function () {
     var cnv = AR.controller.canvas;
     AR.captureImages.push(cnv.toDataURL());
     console.log("capture ID: "+(AR.captures.length-1));
-    AR.cast();
 };
 AR.loadBarcode = function(barcodeNumb){
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
@@ -140,7 +94,7 @@ AR.loadBarcode = function(barcodeNumb){
     AR.scene.scene.add(markerRoot);
 };
 AR.generateVoxels = function (size){
-    var scale = 0.25;
+    var scale = 0.05;
     AR.voxels=[];
     AR.voxelGroup = new THREE.Group();
     for(var i=0;i<size;i+=1){
@@ -199,5 +153,6 @@ AR.init = function () {
         cameraParam: "./lib/data/camera_para.dat"
     });
     $("#capture").on("click",AR.capture);
+    $("#cast").on("click",AR.cast);
 };
 $(document).ready(AR.beginLoad);
