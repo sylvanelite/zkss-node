@@ -4,26 +4,13 @@
   "engines": {
     "node": "6.11.1"
   },
-  "description": "An HTML5 multiplayer game based on Lance",
+  "description": "ZKSS",
   "main": "main.js",
   "dependencies": {
-    "pg": "6.x",
-    "browserify": "^13.0.1",
-    "express": "^4.14.0",
-    "lance-gg": "~1.0.0",
-    "query-string": "^4.2.3",
-    "socket.io": "^1.4.8"
   },
   "devDependencies": {
-    "eslint": "^3.16.1",
-    "eslint-config-google": "^0.7.1",
-    "watchify": "^3.7.0"
   },
   "scripts": {
-    "start": "node main.js",
-    "postinstall": "browserify src/client/clientMain.js -i nodejs-physijs -o dist/bundle.js ",
-    "build": "browserify src/client/clientMain.js -i nodejs-physijs -o dist/bundle.js ",
-    "watchify": "watchify src/client/clientMain.js -i nodejs-physijs -o dist/bundle.js -v -d"
   },
   "repository": {
     "type": "git",
