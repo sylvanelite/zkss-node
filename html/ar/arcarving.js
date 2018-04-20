@@ -1,5 +1,5 @@
 var AR = {
-    VOXEL_COUNT:20,
+    VOXEL_COUNT:10,
     markerRoots:[],
     voxels:[]
 };
@@ -94,7 +94,7 @@ AR.loadBarcode = function(barcodeNumb){
     AR.scene.scene.add(markerRoot);
 };
 AR.generateVoxels = function (size){
-    var scale = 0.05;
+    var scale = 0.25;
     AR.voxels=[];
     AR.voxelGroup = new THREE.Group();
     for(var i=0;i<size;i+=1){
