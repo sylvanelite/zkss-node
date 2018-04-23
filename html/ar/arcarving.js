@@ -74,10 +74,10 @@ AR.cast = function () {
                 if(colour.g>200){//green (backing screen)
                     vox.visible=false;
                 }
-                if(colour.r>200&&colour.g>200&&colour.b){//white (marker)
+                if(colour.r>200&&colour.g>200&&colour.b>200){//white (marker)
                     vox.visible=false;
                 }
-                if(colour.g<50&&colour.r<50&&colour.b){//black (marker)
+                if(colour.g<50&&colour.r<50&&colour.b<50){//black (marker)
                     vox.visible=false;
                 }
             }
