@@ -108,7 +108,6 @@ AR.cast = function () {
         var vox = AR.voxelGroup.geometry.vertices[i];
         var copy = vox.clone();
         var pos = AR.toScreenPositionParticle(AR.voxelGroup.matrixWorld,copy);
-        console.log(copy);
         var idx = (Math.floor(pos.y)*cnv.width)+Math.floor(pos.x);
         idx = idx*4;
         var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
@@ -202,7 +201,7 @@ AR.generateVoxels = function (size){
     }
     var material = new THREE.PointCloudMaterial({
             color: "yellow",
-            size: scale
+            scale: scale
         });
     AR.voxelGroup = new THREE.PointCloud(geometry,material);
     AR.scene.scene.add(AR.voxelGroup);
