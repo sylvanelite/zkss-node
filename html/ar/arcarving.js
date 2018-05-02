@@ -106,8 +106,9 @@ AR.cast = function () {
     for(var i=0;i<size;i+=1){
         var visible=true;
         var vox = AR.voxelGroup.geometry.vertices[i];
-        var copy = new THREE.Vector3(vox.x,vox.y,vox.z);
+        var copy = vox.clone();
         var pos = AR.toScreenPositionParticle(AR.voxelGroup.matrixWorld,copy);
+        console.log(pos);
         var idx = (Math.floor(pos.y)*cnv.width)+Math.floor(pos.x);
         idx = idx*4;
         var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
