@@ -53,7 +53,21 @@ AR.toScreenPosition = function(object){
     //messed up because rotation on canv...?
     return pos;
 };
+AR.toScreenPositionParticle = function(matrixWorld, pos){
+    var camera = AR.scene.camera;
+    var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
+    var widthHalf = width / 2, heightHalf = height / 2;
+    pos = pos.setFromMatrixPosition(matrixWorld);
+    pos.project(camera);
+    
+    pos.x = (pos.x * widthHalf) + widthHalf;
+    pos.y = - (pos.y * heightHalf) + heightHalf;
+    pos.z = 0;
+    //messed up because rotation on canv...?
+    return pos;
+};
 AR.cast = function () {
+    /*
     var cnv = AR.controller.canvas;
     var cnvCtx=cnv.getContext("2d");
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
@@ -82,7 +96,36 @@ AR.cast = function () {
                 }
             }
         }
+    }*/
+    var cnv = AR.controller.canvas;
+    var cnvCtx=cnv.getContext("2d");
+    var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
+    var data=imgData.data;
+    var size = AR.voxelGroup.geometry.vertices;
+    var newVerts = [];
+    for(var i=0;i<size;i+=1){
+        var visible=true;
+        var vox = AR.voxelGroup.geometry.vertices[i];
+        var copy = new THREE.Vector3(vox.x,vox.y,vox.z);
+        var pos = AR.toScreenPositionParticle(AR.voxelGroup.matrixWorld,vox);
+        var idx = (Math.floor(pos.y)*cnv.width)+Math.floor(pos.x);
+        idx = idx*4;
+        var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
+        if(colour.r===undefined){console.log(pos,idx);}
+        if(colour.g>200){//green (backing screen)
+            visible=false;
+        }
+        if(colour.r>200&&colour.g>200&&colour.b>200){//white (marker)
+            visible=false;
+        }
+        if(colour.g<50&&colour.r<50&&colour.b<50){//black (marker)
+            visible=false;
+        }
+        if(visible){
+            newVerts.push(copy);
+        }
     }
+    AR.voxelGroup.geometry.verticesNeedUpdate=1;
 };
 
 AR.capture = function () {
