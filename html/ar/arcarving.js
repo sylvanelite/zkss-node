@@ -121,12 +121,18 @@ AR.loadBarcode = function(barcodeNumb){
 AR.generateVoxels = function (size){
     var scale = 0.25;
     AR.voxels=[];
-    AR.voxelGroup = new THREE.Group();
+    //AR.voxelGroup = new THREE.Group();
+    var particles = new THREE.Geometry();
+    var pMaterial = new THREE.ParticleBasicMaterial({
+      color: 0xFFFFFF,
+      size: scale
+    });
+
     for(var i=0;i<size;i+=1){
         var x=[];
         for(var j=0;j<size;j+=1){
             var y=[];
-            for(var k=0;k<size;k+=1){
+            for(var k=0;k<size;k+=1){/*
                 var mesh = new THREE.Mesh(
                     new THREE.BoxGeometry(scale,scale,scale),
                     new THREE.MeshNormalMaterial()
@@ -136,12 +142,19 @@ AR.generateVoxels = function (size){
                 mesh.position.x = j*scale-(size*scale);
                 mesh.position.y = k*scale-(size*scale);
                 y.push(mesh);
-                AR.voxelGroup.add(mesh);
+                AR.voxelGroup.add(mesh);*/
+                var particle = new THREE.Vertex(
+                    new THREE.Vector3(j*scale-(size*scale), k*scale-(size*scale), i*scale));
+                particles.vertices.push(particle);
             }
             x.push(y);
         }
         AR.voxels.push(x);
     }
+    var particleSystem = new THREE.ParticleSystem(
+        particles,
+        pMaterial);
+    AR.voxelGroup = particleSystem;
     AR.scene.scene.add(AR.voxelGroup);
 };
 AR.init = function () {
