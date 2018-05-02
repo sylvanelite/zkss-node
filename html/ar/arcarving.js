@@ -67,6 +67,7 @@ AR.toScreenPositionParticle = function(matrixWorld, pos){
     return pos;
 };
 AR.cast = function () {
+    console.log("here");
     /*
     var cnv = AR.controller.canvas;
     var cnvCtx=cnv.getContext("2d");
@@ -102,12 +103,11 @@ AR.cast = function () {
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
     var data=imgData.data;
     var size = AR.voxelGroup.geometry.vertices.length;
-    var newVerts = [];
     for(var i=0;i<size;i+=1){
         var visible=true;
         var vox = AR.voxelGroup.geometry.vertices[i];
         var copy = new THREE.Vector3(vox.x,vox.y,vox.z);
-        var pos = AR.toScreenPositionParticle(AR.voxelGroup.matrixWorld,vox);
+        var pos = AR.toScreenPositionParticle(AR.voxelGroup.matrixWorld,copy);
         var idx = (Math.floor(pos.y)*cnv.width)+Math.floor(pos.x);
         idx = idx*4;
         var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
@@ -121,11 +121,10 @@ AR.cast = function () {
         if(colour.g<50&&colour.r<50&&colour.b<50){//black (marker)
             visible=false;
         }
-        if(visible){
-            newVerts.push(copy);
+        if(!visible){
+            vox.set(-999999,-999999,-999999);
         }
     }
-    AR.voxelGroup.geometry.vertices = newVerts;
     AR.voxelGroup.geometry.verticesNeedUpdate=1;
 };
 
