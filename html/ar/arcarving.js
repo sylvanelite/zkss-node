@@ -101,7 +101,7 @@ AR.cast = function () {
     var cnvCtx=cnv.getContext("2d");
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
     var data=imgData.data;
-    var size = AR.voxelGroup.geometry.vertices;
+    var size = AR.voxelGroup.geometry.vertices.length;
     var newVerts = [];
     for(var i=0;i<size;i+=1){
         var visible=true;
@@ -125,6 +125,7 @@ AR.cast = function () {
             newVerts.push(copy);
         }
     }
+    AR.voxelGroup.geometry.vertices = newVerts;
     AR.voxelGroup.geometry.verticesNeedUpdate=1;
 };
 
