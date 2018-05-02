@@ -243,6 +243,6 @@ AR.init = function () {
         cameraParam: "./lib/data/camera_para.dat"
     });
     $("#capture").on("click",AR.capture);
-    $("#cast").on("click",function(){AR.cast());});
+    $("#cast").on("click",function(){AR.cast();});
 };
 $(document).ready(AR.beginLoad);
