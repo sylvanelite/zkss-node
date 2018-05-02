@@ -103,11 +103,13 @@ AR.cast = function () {
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
     var data=imgData.data;
     var size = AR.voxelGroup.geometry.vertices.length;
+    var out = "";
     for(var i=0;i<size;i+=1){
         var visible=true;
         var vox = AR.voxelGroup.geometry.vertices[i];
         var copy = vox.clone();
         var pos = AR.toScreenPositionParticle(AR.voxelGroup.matrixWorld,copy);
+        out+=pos.x+" "+pos.y+" "+pos.z+"|";
         var idx = (Math.floor(pos.y)*cnv.width)+Math.floor(pos.x);
         idx = idx*4;
         var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
@@ -125,6 +127,7 @@ AR.cast = function () {
             vox.set(-999999,-999999,-999999);
         }
     }
+    console.log(out);
     AR.voxelGroup.geometry.verticesNeedUpdate=1;
 };
 
@@ -240,6 +243,6 @@ AR.init = function () {
         cameraParam: "./lib/data/camera_para.dat"
     });
     $("#capture").on("click",AR.capture);
-    $("#cast").on("click",AR.cast);
+    $("#cast").on("click",function(){AR.cast());});
 };
 $(document).ready(AR.beginLoad);
