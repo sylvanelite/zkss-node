@@ -156,10 +156,9 @@ AR.generateVoxels = function (size){
             }
         }
     }
-    var material = new THREE.PointsMaterial({
+    var material = new THREE.PointCloudMaterial({
             color: "yellow",
-            size: scale,
-            sizeAttenuation: false
+            size: scale
         });
     AR.voxelGroup = new THREE.PointCloud(geometry,material);
     AR.scene.scene.add(AR.voxelGroup);
