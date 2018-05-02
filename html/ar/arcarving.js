@@ -57,7 +57,7 @@ AR.toScreenPositionParticle = function(matrixWorld, pos){
     var camera = AR.scene.camera;
     var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
     var widthHalf = width / 2, heightHalf = height / 2;
-    pos = pos.setFromMatrixPosition(matrixWorld);
+    pos = pos.applyMatrix4(matrixWorld);
     pos.project(camera);
     
     pos.x = (pos.x * widthHalf) + widthHalf;
