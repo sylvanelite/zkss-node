@@ -53,7 +53,7 @@ AR.cast = function () {
         if(!visible){
             vox.set(-999999,-999999,-999999);
         }
-        AR.voxelGroup.color[i].set(colour.r,colour.g,color.b);
+        AR.voxelGroup.geometry.color[i].set(colour.r,colour.g,color.b);
     }
     AR.voxelGroup.geometry.verticesNeedUpdate=true;
     AR.voxelGroup.geometry.colorsNeedUpdate=true;
