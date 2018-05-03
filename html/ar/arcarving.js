@@ -14,20 +14,6 @@ AR.render = function (){
     requestAnimationFrame(AR.render);
 };
 
-AR.toScreenPosition = function(object){
-    var camera = AR.scene.camera;
-    var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
-    var widthHalf = width / 2, heightHalf = height / 2;
-    var pos = new THREE.Vector3();
-    pos = pos.setFromMatrixPosition(object.matrixWorld);
-    pos.project(camera);
-    
-    pos.x = (pos.x * widthHalf) + widthHalf;
-    pos.y = - (pos.y * heightHalf) + heightHalf;
-    pos.z = 0;
-    //messed up because rotation on canv...?
-    return pos;
-};
 AR.toScreenPositionParticle = function(matrixWorld, pos){
     var camera = AR.scene.camera;
     var width = AR.renderer.domElement.width, height = AR.renderer.domElement.height;
@@ -38,7 +24,6 @@ AR.toScreenPositionParticle = function(matrixWorld, pos){
     pos.x = (pos.x * widthHalf) + widthHalf;
     pos.y = - (pos.y * heightHalf) + heightHalf;
     pos.z = 0;
-    //messed up because rotation on canv...?
     return pos;
 };
 AR.cast = function () {
