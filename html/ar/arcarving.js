@@ -77,7 +77,7 @@ AR.generateVoxels = function (size){
         for(var j=0;j<size;j+=1){
             for(var k=0;k<size;k+=1){
                 geometry.vertices.push(
-                    new THREE.Vector3(j*scale-(size*scale), k*scale-(size*scale), i*scale));
+                    new THREE.Vector3(j*scale-(size*scale)+(size*scale)/2, k*scale-(size*scale)+(size*scale)/2, i*scale));
                 geometry.colors.push(
                     new THREE.Color("rgb(255,0,0)"));
             }
