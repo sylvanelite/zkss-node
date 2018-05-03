@@ -1,28 +1,3 @@
-/*
-TODO: scale voxels to extend from the marker to the camera
-var mPos = new THREE.Vector3();
-mPos = mPos.setFromMatrixPosition(AR.markerRoots[0].matrixWorld);
-//camera has matrixWorld/position as identity.
-//If it wasn't, the have to use setFromMatrixPosition like above.
-var distToCamera = mPos.distanceTo(AR.scene.camera.position);
-
-
-//do code like this with a flag to run only once
-//and set the scale of the voxels based on camera distance?
-if(AR.markerRoots.length>1){
-    var m1=AR.markerRoots[0];
-    if(m1.visible){
-        //TODO: Call cast(), at the moment call it via console
-    }
-}
-//todo: replace intensive voxels with BSP?
-//https://wiki.unrealengine.com/Basic_Level_Design_BSP_(Unreal_Tournament)
-
-//OR replace with simpler method: when number of voxels is low,
-//replace with progressivly higher number of cubes
-//if each new set of cubes is at a smaller scale, result will be better
-*/
-
 var AR = {
     VOXEL_COUNT:10,
     markerRoots:[],
@@ -68,48 +43,16 @@ AR.toScreenPositionParticle = function(matrixWorld, pos){
 };
 AR.cast = function () {
     console.log("here");
-    /*
-    var cnv = AR.controller.canvas;
-    var cnvCtx=cnv.getContext("2d");
-    var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
-    var data=imgData.data;
-    var size = AR.voxels.length;
-    for(var i=0;i<size;i+=1){
-        for(var j=0;j<size;j+=1){
-            for(var k=0;k<size;k+=1){
-                var vox = AR.voxels[i][j][k];
-                var pos = AR.toScreenPosition(vox);
-                //p.x = index / 3;
-                //p.y = index % 3;
-                //int oneDindex = (row * length_of_row) + column;
-                var idx = (Math.floor(pos.y)*cnv.width)+Math.floor(pos.x);
-                idx = idx*4;
-                var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
-                if(colour.r===undefined){console.log(pos,idx);}
-                if(colour.g>200){//green (backing screen)
-                    vox.visible=false;
-                }
-                if(colour.r>200&&colour.g>200&&colour.b>200){//white (marker)
-                    vox.visible=false;
-                }
-                if(colour.g<50&&colour.r<50&&colour.b<50){//black (marker)
-                    vox.visible=false;
-                }
-            }
-        }
-    }*/
     var cnv = AR.controller.canvas;
     var cnvCtx=cnv.getContext("2d");
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
     var data=imgData.data;
     var size = AR.voxelGroup.geometry.vertices.length;
-    var out = "";
     for(var i=0;i<size;i+=1){
         var visible=true;
         var vox = AR.voxelGroup.geometry.vertices[i];
         var copy = vox.clone();
         var pos = AR.toScreenPositionParticle(AR.voxelGroup.matrixWorld,copy);
-        out+=pos.x+" "+pos.y+" "+pos.z+"|";
         var idx = (Math.floor(pos.y)*cnv.width)+Math.floor(pos.x);
         idx = idx*4;
         var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
@@ -127,36 +70,9 @@ AR.cast = function () {
             vox.set(-999999,-999999,-999999);
         }
     }
-    console.log(out);
     AR.voxelGroup.geometry.verticesNeedUpdate=1;
 };
 
-AR.capture = function () {
-    var result = {};
-    if(!AR.hasOwnProperty("captures")){
-        AR.captures = [];
-        AR.captureImages = [];
-    }
-    result.projectionMatrix = AR.controller.getCameraMatrix();
-    result.transformMatrix = AR.controller.getTransformationMatrix();
-    result.markerTransformMatrix = AR.controller.getMarkerTransformationMatrix();
-    var threeTransformMat = new THREE.Matrix4();
-    threeTransformMat=threeTransformMat.set(result.transformMatrix[0],result.transformMatrix[1],result.transformMatrix[2],result.transformMatrix[3],
-        result.transformMatrix[4],result.transformMatrix[5],result.transformMatrix[6],result.transformMatrix[7],
-        result.transformMatrix[8],result.transformMatrix[9],result.transformMatrix[10],result.transformMatrix[11],
-        result.transformMatrix[12],result.transformMatrix[13],result.transformMatrix[14],result.transformMatrix[15]);
-    var threeProjMat = new THREE.Matrix4();
-    threeProjMat=threeProjMat.set(result.projectionMatrix[0],result.projectionMatrix[1],result.projectionMatrix[2],result.projectionMatrix[3],
-        result.projectionMatrix[4],result.projectionMatrix[5],result.projectionMatrix[6],result.projectionMatrix[7],
-        result.projectionMatrix[8],result.projectionMatrix[9],result.projectionMatrix[10],result.projectionMatrix[11],
-        result.projectionMatrix[12],result.projectionMatrix[13],result.projectionMatrix[14],result.projectionMatrix[15]);
-    var threeResult = threeTransformMat.multiply(threeProjMat);
-    result.multiplyMatrix = threeResult.elements;
-    AR.captures.push(result);
-    var cnv = AR.controller.canvas;
-    AR.captureImages.push(cnv.toDataURL());
-    console.log("capture ID: "+(AR.captures.length-1));
-};
 AR.loadBarcode = function(barcodeNumb){
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
     AR.generateVoxels(AR.VOXEL_COUNT);
@@ -165,32 +81,6 @@ AR.loadBarcode = function(barcodeNumb){
     AR.scene.scene.add(markerRoot);
 };
 AR.generateVoxels = function (size){
-    /*
-    var scale = 0.25;
-    AR.voxels=[];
-    AR.voxelGroup = new THREE.Group();
-    for(var i=0;i<size;i+=1){
-        var x=[];
-        for(var j=0;j<size;j+=1){
-            var y=[];
-            for(var k=0;k<size;k+=1){
-                var mesh = new THREE.Mesh(
-                    new THREE.BoxGeometry(scale,scale,scale),
-                    new THREE.MeshNormalMaterial()
-                );
-                mesh.material.shading = THREE.FlatShading;
-                mesh.position.z = i*scale;
-                mesh.position.x = j*scale-(size*scale);
-                mesh.position.y = k*scale-(size*scale);
-                y.push(mesh);
-                AR.voxelGroup.add(mesh);
-            }
-            x.push(y);
-        }
-        AR.voxels.push(x);
-    }
-    AR.scene.scene.add(AR.voxelGroup);
-    */
     var scale = 0.25;
     AR.voxels=[];
     var geometry = new THREE.Geometry();
