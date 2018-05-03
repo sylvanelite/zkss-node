@@ -70,7 +70,7 @@ AR.loadBarcode = function(barcodeNumb){
     AR.scene.scene.add(markerRoot);
 };
 AR.generateVoxels = function (size){
-    var scale = 0.125;
+    var scale = 0.05;
     AR.voxels=[];
     var geometry = new THREE.Geometry();
     for(var i=0;i<size;i+=1){
@@ -101,6 +101,9 @@ AR.init = function () {
 			renderer.setSize(h,w);
 			renderer.domElement.style.transformOrigin = '0 0';
 			renderer.domElement.style.transform = 'rotate(-90deg) translateX(-100%)';
+            var scaleFactorX = $(window).width()/h;
+            renderer.domElement.style.width = (h*scaleFactorX)+"px";
+            renderer.domElement.style.height = (w*scaleFactorX)+"px";
 		} else {
 			renderer.setSize(w,h);
 		}
