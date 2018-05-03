@@ -53,7 +53,7 @@ AR.cast = function () {
         if(!visible){
             vox.set(-999999,-999999,-999999);
         }
-        AR.voxelGroup.geometry.colors[i].set(colour.r,colour.g,color.b);
+        AR.voxelGroup.geometry.colors[i].set(colour.r,colour.g,colour.b);
     }
     AR.voxelGroup.geometry.verticesNeedUpdate=true;
     AR.voxelGroup.geometry.colorsNeedUpdate=true;
@@ -98,6 +98,7 @@ AR.init = function () {
 			renderer.setSize(h,w);
 			renderer.domElement.style.transformOrigin = '0 0';
 			renderer.domElement.style.transform = 'rotate(-90deg) translateX(-100%)';
+            renderer.domElement.style.width='100%';
 		} else {
 			renderer.setSize(w,h);
 		}
