@@ -53,8 +53,10 @@ AR.cast = function () {
         if(!visible){
             vox.set(-999999,-999999,-999999);
         }
+        AR.voxelGroup.color[i].set(colour.r,colour.g,color.b);
     }
-    AR.voxelGroup.geometry.verticesNeedUpdate=1;
+    AR.voxelGroup.geometry.verticesNeedUpdate=true;
+    AR.voxelGroup.geometry.colorsNeedUpdate=true;
 };
 
 AR.loadBarcode = function(barcodeNumb){
@@ -73,13 +75,12 @@ AR.generateVoxels = function (size){
             for(var k=0;k<size;k+=1){
                 geometry.vertices.push(
                     new THREE.Vector3(j*scale-(size*scale), k*scale-(size*scale), i*scale));
+                geometry.colors.push(
+                    new THREE.Color("rgb(255,0,0)"));
             }
         }
     }
-    var material = new THREE.PointCloudMaterial({
-            color: "yellow",
-            scale: scale
-        });
+    var material = new THREE.PointCloudMaterial( { vertexColors: THREE.VertexColors } );
     AR.voxelGroup = new THREE.PointCloud(geometry,material);
     AR.scene.scene.add(AR.voxelGroup);
 };
