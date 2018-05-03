@@ -40,7 +40,9 @@ AR.cast = function () {
         var idx = (Math.floor(pos.y)*cnv.width)+Math.floor(pos.x);
         idx = idx*4;
         var colour = {r:data[idx],g:data[idx+1],b:data[idx+2]};
-        if(colour.r===undefined){console.log(pos,idx);}
+        if(colour.r===undefined){//out of bounds vertex
+            visible=false;
+        }
         if(colour.g>200){//green (backing screen)
             visible=false;
         }
@@ -52,8 +54,9 @@ AR.cast = function () {
         }
         if(!visible){
             vox.set(-999999,-999999,-999999);
+        }else{
+            AR.voxelGroup.geometry.colors[i].set(colour.r,colour.g,colour.b);
         }
-        AR.voxelGroup.geometry.colors[i].set(colour.r,colour.g,colour.b);
     }
     AR.voxelGroup.geometry.verticesNeedUpdate=true;
     AR.voxelGroup.geometry.colorsNeedUpdate=true;
@@ -67,7 +70,7 @@ AR.loadBarcode = function(barcodeNumb){
     AR.scene.scene.add(markerRoot);
 };
 AR.generateVoxels = function (size){
-    var scale = 0.25;
+    var scale = 0.025;
     AR.voxels=[];
     var geometry = new THREE.Geometry();
     for(var i=0;i<size;i+=1){
