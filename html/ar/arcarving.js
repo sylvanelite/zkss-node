@@ -1,5 +1,5 @@
 var AR = {
-    VOXEL_COUNT:10,
+    VOXEL_COUNT:64,
     markerRoots:[],
     voxels:[]
 };
@@ -27,7 +27,6 @@ AR.toScreenPositionParticle = function(matrixWorld, pos){
     return pos;
 };
 AR.cast = function () {
-    console.log("here");
     var cnv = AR.controller.canvas;
     var cnvCtx=cnv.getContext("2d");
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
