@@ -83,7 +83,7 @@ AR.generateVoxels = function (size){
             }
         }
     }
-    var material = new THREE.PointCloudMaterial( { vertexColors: THREE.VertexColors,size:0.01 } );
+    var material = new THREE.PointCloudMaterial( { vertexColors: THREE.VertexColors,size:0.1 } );
     AR.voxelGroup = new THREE.PointCloud(geometry,material);
     AR.scene.scene.add(AR.voxelGroup);
 };
