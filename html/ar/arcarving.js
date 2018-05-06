@@ -1,5 +1,5 @@
 var AR = {
-    VOXEL_COUNT:64*5,
+    VOXEL_COUNT:64,
     markerRoots:[],
     voxels:[]
 };
@@ -83,8 +83,8 @@ AR.generateVoxels = function (size){
             }
         }
     }
-    var material = new THREE.PointCloudMaterial( { vertexColors: THREE.VertexColors } );
-    AR.voxelGroup = new THREE.PointCloud(geometry,material);
+    var material = new THREE.PointsMaterial( { vertexColors: THREE.VertexColors } );
+    AR.voxelGroup = new THREE.Points(geometry,material);
     AR.scene.scene.add(AR.voxelGroup);
 };
 AR.init = function () {
