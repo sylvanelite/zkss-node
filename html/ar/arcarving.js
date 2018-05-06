@@ -1,5 +1,5 @@
 var AR = {
-    VOXEL_COUNT:64,
+    VOXEL_COUNT:64*5,
     markerRoots:[],
     voxels:[]
 };
