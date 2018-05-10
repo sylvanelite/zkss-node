@@ -14,9 +14,9 @@ https://www.youtube.com/watch?v=9hAadMszs5k
 
 
 var AR = {
-    VOXEL_WIDTH:12,
-    VOXEL_HEIGHT:128,
-    VOXEL_DEPTH:128,
+    VOXEL_WIDTH:64,
+    VOXEL_HEIGHT:64,
+    VOXEL_DEPTH:64,
     markerRoots:[],
     voxels:[]
 };
@@ -87,7 +87,7 @@ AR.loadBarcode = function(barcodeNumb){
     AR.scene.scene.add(markerRoot);
 };
 AR.generateVoxels = function (){
-    var scale = 0.05;
+    var scale = 0.25;
     AR.voxels=[];
     var geometry = new THREE.Geometry();
     for(var i=0;i<AR.VOXEL_WIDTH;i+=1){
