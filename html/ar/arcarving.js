@@ -1,5 +1,22 @@
+/*
+http://answers.opencv.org/question/26596/what-does-projection-matrix-provided-by-the-calibration-represent/
+
+http://nghiaho.com/?p=2124
+
+https://en.wikipedia.org/wiki/Camera_resectioning
+
+https://eprints.soton.ac.uk/258885/1/abdullah-art02.pdf
+
+https://www.youtube.com/watch?v=9hAadMszs5k
+
+*/
+
+
+
 var AR = {
-    VOXEL_COUNT:64,
+    VOXEL_WIDTH:128,
+    VOXEL_HEIGHT:128,
+    VOXEL_DEPTH:12,
     markerRoots:[],
     voxels:[]
 };
@@ -64,18 +81,18 @@ AR.cast = function () {
 
 AR.loadBarcode = function(barcodeNumb){
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
-    AR.generateVoxels(AR.VOXEL_COUNT);
+    AR.generateVoxels();
     markerRoot.add(AR.voxelGroup);
     AR.markerRoots.push(markerRoot);
     AR.scene.scene.add(markerRoot);
 };
-AR.generateVoxels = function (size){
+AR.generateVoxels = function (){
     var scale = 0.05;
     AR.voxels=[];
     var geometry = new THREE.Geometry();
-    for(var i=0;i<size;i+=1){
-        for(var j=0;j<size;j+=1){
-            for(var k=0;k<size;k+=1){
+    for(var i=0;i<AR.VOXEL_WIDTH;i+=1){
+        for(var j=0;j<AR.VOXEL_HEIGHT;j+=1){
+            for(var k=0;k<AR.VOXEL_DEPTH;k+=1){
                 geometry.vertices.push(
                     new THREE.Vector3(j*scale-(size*scale), k*scale-(size*scale), i*scale));
                 geometry.colors.push(
