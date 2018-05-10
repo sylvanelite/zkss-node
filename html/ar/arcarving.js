@@ -15,8 +15,8 @@ https://www.youtube.com/watch?v=9hAadMszs5k
 
 var AR = {
     VOXEL_WIDTH:128,
-    VOXEL_HEIGHT:128,
-    VOXEL_DEPTH:12,
+    VOXEL_HEIGHT:12,
+    VOXEL_DEPTH:128,
     markerRoots:[],
     voxels:[]
 };
