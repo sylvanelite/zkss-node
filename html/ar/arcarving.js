@@ -87,7 +87,7 @@ AR.loadBarcode = function(barcodeNumb){
     AR.scene.scene.add(markerRoot);
 };
 AR.generateVoxels = function (){
-    var scale = 0.25;
+    var scale = 0.1;
     AR.voxels=[];
     var geometry = new THREE.Geometry();
     for(var i=0;i<AR.VOXEL_WIDTH;i+=1){
