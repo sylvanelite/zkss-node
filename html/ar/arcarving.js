@@ -18,8 +18,15 @@ AR.cast = function () {
     var cnvCtx=cnv.getContext("2d");
     var imgData=cnvCtx.getImageData(0,0,cnv.width,cnv.height);
     var data=imgData.data;
+    var img = document.createElement('img');
+    var url = cnv.toDataURL();
+    img.src = url;
+    $("#cast").append($(img));
+    $(img).width("10px;");
+    $(img).height("10px;");
     AR.saveData.push({
         data:data,
+        img:img,
         matrixWorld:JSON.stringify(AR.markerRoots[0].matrixWorld.elements),
         matrixCamera:JSON.stringify(AR.scene.camera.matrixWorld.elements)
     });
