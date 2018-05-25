@@ -20,7 +20,7 @@ AR.cast = function () {
     var data=imgData.data;
     AR.saveData.push({
         data:data,
-        matrixWorld:JSON.stringify(AR.markerRoots[0].elements),
+        matrixWorld:JSON.stringify(AR.markerRoots[0].matrixWorld.elements),
         matrixCamera:JSON.stringify(AR.scene.camera.matrixWorld.elements)
     });
 };
