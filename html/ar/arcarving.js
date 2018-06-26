@@ -28,7 +28,7 @@ AR.cast = function () {
         data:data,
         img:img,
         matrixWorld:JSON.stringify(AR.markerRoots[0].matrixWorld.elements),
-        matrixCamera:JSON.stringify(AR.scene.camera.matrixWorld.elements)
+        matrixCamera:JSON.stringify(AR.controller.getCameraMatrix())
     });
 };
 
@@ -60,6 +60,7 @@ AR.init = function () {
 		}
         $("body").append(AR.renderer.domElement );
         AR.loadBarcode(5);
+        AR.loadBarcode(20);
         AR.render();
     };
     var videoSuccess = function (video,stream) {
