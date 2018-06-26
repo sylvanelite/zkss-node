@@ -2,11 +2,6 @@ var AR = {
     markerRoots:[],
     saveData:[]
 };
-AR.beginLoad = function (){
-    if (window.ARController && ARController.getUserMediaThreeScene) {
-        AR.init();
-    }
-};
 AR.render = function (){
     AR.scene.process();
     AR.scene.renderOn(AR.renderer);
@@ -39,6 +34,7 @@ AR.loadBarcode = function(barcodeNumb){
 };
 
 AR.init = function () {
+    $("#cast").off("click");
     var getMediaSuccess = function (arScene, arController, arCamera){
         AR.scene = arScene;
         AR.controller = arController;
@@ -77,4 +73,9 @@ AR.init = function () {
     });
     $("#cast").on("click",function(){AR.cast();});
 };
-$(document).ready(AR.beginLoad);
+$(document).ready(function(){
+     $("#cast").show();
+    $("#cast").on("click",function(){
+        AR.init();
+    });
+});
