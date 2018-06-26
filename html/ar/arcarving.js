@@ -57,9 +57,9 @@ AR.init = function () {
 			renderer.setSize(h,w);
 			renderer.domElement.style.transformOrigin = '0 0';
 			renderer.domElement.style.transform = 'rotate(-90deg) translateX(-100%)';
-            var scaleFactor = $(window).height()/h;
-            renderer.domElement.style.width = (h*scaleFactor)+"px";
-            renderer.domElement.style.height = (w*scaleFactor)+"px";
+            var scaleFactorX = $(window).height()/h;
+            renderer.domElement.style.width = (h*scaleFactorX)+"px";
+            renderer.domElement.style.height = (w*scaleFactorX)+"px";
 		} else {
 			renderer.setSize(w,h);
 		}
