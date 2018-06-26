@@ -28,12 +28,21 @@ AR.cast = function () {
 };
 
 AR.loadBarcode = function(barcodeNumb){
+    var cube = new THREE.Mesh(
+        new THREE.BoxGeometry(1,1,1),
+        new THREE.MeshNormalMaterial()
+    );
+    cube.material.shading = THREE.FlatShading;
+    cube.position.z = 0.5;
     var markerRoot = AR.controller.createThreeBarcodeMarker(barcodeNumb, 1);
+    markerRoot.add(cube);
     AR.markerRoots.push(markerRoot);
     AR.scene.scene.add(markerRoot);
+    
 };
 
 AR.init = function () {
+    $("#cast").text("cast");
     $("#cast").off("click");
     var getMediaSuccess = function (arScene, arController, arCamera){
         AR.scene = arScene;
@@ -45,12 +54,15 @@ AR.init = function () {
 		var w = AR.scene.video.videoWidth;
 		var h = AR.scene.video.videoHeight;
 		if (AR.controller.orientation === 'portrait') {
-			renderer.setSize(h,w);
+            var temp = w;
+            w = h;
+            h = temp;
+			renderer.setSize(w,h);
 			renderer.domElement.style.transformOrigin = '0 0';
 			renderer.domElement.style.transform = 'rotate(-90deg) translateX(-100%)';
-            var scaleFactorX = $(window).width()/h;
-            renderer.domElement.style.width = (h*scaleFactorX)+"px";
-            renderer.domElement.style.height = (w*scaleFactorX)+"px";
+            var scaleFactor = $(window).height()/w;
+            renderer.domElement.style.width = (w*scaleFactor)+"px";
+            renderer.domElement.style.height = (h*scaleFactor)+"px";
 		} else {
 			renderer.setSize(w,h);
 		}
@@ -74,7 +86,8 @@ AR.init = function () {
     $("#cast").on("click",function(){AR.cast();});
 };
 $(document).ready(function(){
-     $("#cast").show();
+    $("#cast").text("begin");
+    $("#cast").show();
     $("#cast").on("click",function(){
         AR.init();
     });
