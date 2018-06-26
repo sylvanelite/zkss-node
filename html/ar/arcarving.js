@@ -54,15 +54,12 @@ AR.init = function () {
 		var w = AR.scene.video.videoWidth;
 		var h = AR.scene.video.videoHeight;
 		if (AR.controller.orientation === 'portrait') {
-            var temp = w;
-            w = h;
-            h = temp;
-			renderer.setSize(w,h);
+			renderer.setSize(h,w);
 			renderer.domElement.style.transformOrigin = '0 0';
 			renderer.domElement.style.transform = 'rotate(-90deg) translateX(-100%)';
-            var scaleFactor = $(window).height()/w;
-            renderer.domElement.style.width = (w*scaleFactor)+"px";
-            renderer.domElement.style.height = (h*scaleFactor)+"px";
+            var scaleFactor = $(window).height()/h;
+            renderer.domElement.style.width = (h*scaleFactor)+"px";
+            renderer.domElement.style.height = (w*scaleFactor)+"px";
 		} else {
 			renderer.setSize(w,h);
 		}
