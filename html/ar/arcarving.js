@@ -43,6 +43,19 @@ AR.loadBarcode = function(barcodeNumb){
     
 };
 
+AR.getMarkerCoordinates = function (marker) {
+    //marker = AR.markerRoots[0]
+    var result = {
+        position: marker.getWorldPosition(),
+        rotation: marker.getWorldRotation(),
+        direction : marker.getWorldDirection()
+    };//also: getWorldDirection(), getWorldScale(), getWorldQuaternion();
+    var RAD_TO_DEG = 57.2958;
+    var theta = Math.atan2(result.direction.x,result.direction.z);
+    result.dirDegrees = theta*RAD_TO_DEG;
+    return result;
+};
+
 AR.init = function () {
     $("#cast").text("cast");
     $("#cast").off("click");
