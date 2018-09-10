@@ -5,7 +5,9 @@ var AR = {
 AR.render = function (){
     AR.scene.process();
     AR.scene.renderOn(AR.renderer);
-    requestAnimationFrame(AR.render);
+    setTimeout(function(){
+        requestAnimationFrame(AR.render);
+    },100);
 };
 
 AR.cast = function () {
