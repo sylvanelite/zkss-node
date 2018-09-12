@@ -79,8 +79,10 @@ AR.init = function () {
 			renderer.setSize(w,h);
 		}
         $("body").append(AR.renderer.domElement );
-        AR.loadBarcode(5);
-        AR.loadBarcode(20);
+        AR.loadBarcode(15);//top left
+        AR.loadBarcode(5); //top right
+        AR.loadBarcode(20);//bottom left
+        AR.loadBarcode(25);//bottom right
         AR.render();
     };
     var videoSuccess = function (video,stream) {
