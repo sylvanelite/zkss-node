@@ -133,12 +133,18 @@ server.get('/db/doc_set',function (request, response){
 	var k = request.query.data_key;
 	var v = request.query.data_value;
 	var api = request.query.api;
+	var responseObj = {
+		success:false,
+		data:{}
+	};
 	client.connect();
     client.query(' SELECT key FROM api WHERE (key=$1) AND writeable=true ',[api], function(err, result) {
 		if (err) {
 			console.error(err);
 			client.end();
-			response.send("Error " + err);
+			responseObj.success=false;
+			responseObj.data="Error API lookup";
+			response.send(JSON.stringify(responseObj));
 		}else{
 			if(result.rows[0] &&
 			   result.rows[0].key == api.toUpperCase()){
@@ -148,15 +154,21 @@ server.get('/db/doc_set',function (request, response){
 				if (err){
 					console.error(err);
 					client.end();
-					response.send("Error " + err);
+					responseObj.success=false;
+					responseObj.data="Error Doc store";
+					response.send(JSON.stringify(responseObj));
 				}else{
 					client.end();
-					response.send(JSON.stringify(res));
+					responseObj.success=true;
+					responseObj.data="success";
+					response.send(JSON.stringify(responseObj));
 				}
 				});
 			}else{
 				client.end();
-				response.send("Error API Key");
+				responseObj.success=false;
+				responseObj.data="Error API Key";
+				response.send(JSON.stringify(responseObj));
 			}
 		}
 	});
@@ -169,29 +181,41 @@ server.get('/db/doc_get',function (request, response){
 	});
 	var k = request.query.data_key;
 	var api = request.query.api;
+	var responseObj = {
+		success:false,
+		data:{}
+	};
 	client.connect();
     client.query(' SELECT key FROM api WHERE (key=$1) ',[api], function(err, result) {
 		if (err) {
 			console.error(err);
 			client.end();
-			response.send("Error " + err);
+			responseObj.success=false;
+			responseObj.data="Error API lookup";
+			response.send(JSON.stringify(responseObj));
 		}else{
 			if(result.rows[0] &&
 			result.rows[0].key == api.toUpperCase()){
-				client.query('  SELECT (name, content) FROM documents '+
+				client.query('  SELECT name, content FROM documents '+
 				' WHERE  name=$1 ',[k], function(err, res) {
 				if (err){
 					console.error(err);
 					client.end();
-					response.send("Error " + err);
+					responseObj.success=false;
+					responseObj.data="Error document store";
+					response.send(JSON.stringify(responseObj));
 				}else{
 					client.end();
-					response.send(res.rows[0]);
+					responseObj.success=true;
+					responseObj.data=res.rows[0].content);
+					response.send(JSON.stringify(responseObj));
 				}
 				});
 			}else{
 				client.end();
-				response.send("Error API Key");
+				responseObj.success=false;
+				responseObj.data="Error API Key";
+				response.send(JSON.stringify(responseObj));
 			}
 		}
 	});
