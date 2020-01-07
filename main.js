@@ -140,6 +140,7 @@ server.get('/db/doc_set',function (request, response){
 			client.end();
 			response.send("Error " + err);
 		}else{
+					response.send("result"+result);/*
 			if(result.rows[0].key == api.toUpperCase()){
 				client.query('  INSERT INTO documents (name, content) '+
 				' VALUES ($1, $2) ON CONFLICT (name) DO UPDATE '+
@@ -156,7 +157,8 @@ server.get('/db/doc_set',function (request, response){
 			}else{
 				client.end();
 				response.send("Error API Key");
-			}
+			}*/
+			client.end();
 		}
 	});
 });
