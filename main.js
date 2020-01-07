@@ -144,14 +144,14 @@ server.get('/db/doc_set',function (request, response){
 			   result.rows[0].key == api.toUpperCase()){
 				client.query('  INSERT INTO documents (name, content) '+
 				' VALUES ($1, $2) ON CONFLICT (name) DO UPDATE '+
-				' SET content=$2 WHERE documents.name=$1',[k,v], function(err, result) {
+				' SET content=$2 WHERE documents.name=$1',[k,v], function(err, res) {
 				if (err){
 					console.error(err);
 					client.end();
 					response.send("Error " + err);
 				}else{
 					client.end();
-					response.send(JSON.stringify(result));
+					response.send(JSON.stringify(res));
 				}
 				});
 			}else{
@@ -179,14 +179,14 @@ server.get('/db/doc_get',function (request, response){
 			if(result.rows[0] &&
 			result.rows[0].key == api.toUpperCase()){
 				client.query('  SELECT (name, content) FROM documents '+
-				' WHERE  name=$1 ',[k], function(err, result) {
+				' WHERE  name=$1 ',[k], function(err, res) {
 				if (err){
 					console.error(err);
 					client.end();
 					response.send("Error " + err);
 				}else{
 					client.end();
-					response.send(result.rows[0].content);
+					response.send(res.rows[0]);
 				}
 				});
 			}else{
