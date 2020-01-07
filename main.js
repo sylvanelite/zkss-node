@@ -144,7 +144,7 @@ server.get('/db/doc_set',function (request, response){
 			   result.rows[0].key == api.toUpperCase()){
 				client.query('  INSERT INTO documents (name, content) '+
 				' VALUES ($1, $2) ON CONFLICT (name) DO UPDATE '+
-				' SET  name=$1, content=$2 WHERE name=$1',[k,v], function(err, result) {
+				' SET content=$2 WHERE documents.name=$1',[k,v], function(err, result) {
 				if (err){
 					console.error(err);
 					client.end();
