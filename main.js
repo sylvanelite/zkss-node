@@ -207,7 +207,7 @@ server.get('/db/doc_get',function (request, response){
 				}else{
 					client.end();
 					responseObj.success=true;
-					responseObj.data=res.rows[0].content);
+					responseObj.data=res.rows[0].content;
 					response.send(JSON.stringify(responseObj));
 				}
 				});
