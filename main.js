@@ -111,5 +111,89 @@ server.get('/db/setUpdates',function (request, response){
   });
 });
 */
+/*
+
+
+
+client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
+});
+*/
+const { Client } = require('pg');
+server.get('/db/doc_set',function (request, response){
+	response.header("Access-Control-Allow-Origin", "*");
+	const client = new Client({
+	  connectionString: process.env.DATABASE_URL,
+	  ssl: true,
+	});
+	var k = request.query.data_key;
+	var v = request.query.data_value;
+	var api = request.query.api;
+	client.connect();
+    client.query(' SELECT key FROM api WHERE (key=$1) AND writeable=true ',[api], function(err, result) {
+		if (err) {
+			console.error(err);
+			client.end();
+			response.send("Error " + err);
+		}else{
+			if(result.rows[0].key == api.toUpperCase()){
+				client.query('  INSERT INTO documents (name, content) '+
+				' VALUES ($1, $2) ON CONFLICT (name) DO UPDATE '+
+				' SET  name=$1, content=$2 ',[k,v], function(err, result) {
+				if (err){
+					console.error(err);
+					client.end();
+					response.send("Error " + err);
+				}else{
+					client.end();
+					response.send("result"+result);
+				}
+				});
+			}else{
+				client.end();
+				response.send("Error API Key");
+			}
+		}
+	});
+});
+server.get('/db/doc_get',function (request, response){
+	response.header("Access-Control-Allow-Origin", "*");
+	const client = new Client({
+	  connectionString: process.env.DATABASE_URL,
+	  ssl: true,
+	});
+	var k = request.query.data_key;
+	var api = request.query.api;
+	client.connect();
+    client.query(' SELECT key FROM api WHERE (key=$1) ',[api], function(err, result) {
+		if (err) {
+			console.error(err);
+			client.end();
+			response.send("Error " + err);
+		}else{
+			if(result.rows[0].key == api.toUpperCase()){
+				client.query('  SELECT (name, content) FROM documents '+
+				' WHERE  name=$1 ',[k], function(err, result) {
+				if (err){
+					console.error(err);
+					client.end();
+					response.send("Error " + err);
+				}else{
+					client.end();
+					response.send(result.rows[0]);
+				}
+				});
+			}else{
+				client.end();
+				response.send("Error API Key");
+			}
+		}
+	});
+});
+
 server.use('/html', express.static('html'));
 
