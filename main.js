@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
 
 const PORT =  process.env.PORT || 8080;
@@ -11,13 +10,12 @@ const server = express();
 server.get('/', function(req, res) { res.sendFile(INDEX); });
 server.use('/', express.static(path.join(__dirname, '.')));
 server.use(express.urlencoded());
-server.options('*', cors())
 
 let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const { Client } = require('pg');
 server.post('/db/doc_set',function (request, response){
-	//response.header("Access-Control-Allow-Origin", "*");
+	response.header("Access-Control-Allow-Origin", "*");
 	const client = new Client({
 	  connectionString: process.env.DATABASE_URL,
 	  ssl: true,
@@ -66,7 +64,7 @@ server.post('/db/doc_set',function (request, response){
 	});
 });
 server.get('/db/doc_get',function (request, response){
-	//response.header("Access-Control-Allow-Origin", "*");
+	response.header("Access-Control-Allow-Origin", "*");
 	const client = new Client({
 	  connectionString: process.env.DATABASE_URL,
 	  ssl: true,
