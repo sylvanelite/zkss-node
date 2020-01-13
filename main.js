@@ -124,7 +124,7 @@ client.query('SELECT table_schema,table_name FROM information_schema.tables;', (
 });
 */
 const { Client } = require('pg');
-server.get('/db/doc_set',function (request, response){
+server.post('/db/doc_set',function (request, response){
 	response.header("Access-Control-Allow-Origin", "*");
 	const client = new Client({
 	  connectionString: process.env.DATABASE_URL,
