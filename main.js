@@ -9,6 +9,8 @@ const INDEX = path.join(__dirname, './index.html');
 const server = express();
 server.get('/', function(req, res) { res.sendFile(INDEX); });
 server.use('/', express.static(path.join(__dirname, '.')));
+server.use(express.json())
+
 let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const { Client } = require('pg');
