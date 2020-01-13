@@ -9,7 +9,7 @@ const INDEX = path.join(__dirname, './index.html');
 const server = express();
 server.get('/', function(req, res) { res.sendFile(INDEX); });
 server.use('/', express.static(path.join(__dirname, '.')));
-server.use(express.urlencoded());
+server.use(express.text());
 
 let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
@@ -20,9 +20,10 @@ server.post('/db/doc_set',function (request, response){
 	  connectionString: process.env.DATABASE_URL,
 	  ssl: true,
 	});
-	var k = request.body.data_key;
-	var v = request.body.data_value;
-	var api = request.body.api;
+	var body = JSON.parse(request.body);
+	var k = body.data_key;
+	var v = body.data_value;
+	var api = body.api;
 	var responseObj = {
 		success:false,
 		data:{}
