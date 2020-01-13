@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
 
 const PORT =  process.env.PORT || 8080;
@@ -10,8 +9,7 @@ const INDEX = path.join(__dirname, './index.html');
 const server = express();
 server.get('/', function(req, res) { res.sendFile(INDEX); });
 server.use('/', express.static(path.join(__dirname, '.')));
-server.use(express.json());
-server.use(cors());
+server.use(express.text());
 
 let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
