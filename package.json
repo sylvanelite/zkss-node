@@ -7,6 +7,7 @@
   "description": "ZKSS",
   "main": "main.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.3",
     "pg": "^7.17.0"
   },
