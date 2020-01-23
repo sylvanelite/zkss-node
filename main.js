@@ -45,6 +45,7 @@ server.post('/db/doc_set',function (request, response){
 				response.send(JSON.stringify(responseObj));
 			}else{
 				if(result.rows&&
+				   result.rows.length>0&&
 				   result.rows[0] &&
 				   result.rows[0].key == api.toUpperCase()){
 					client.query('  INSERT INTO documents (name, content) '+
@@ -101,8 +102,10 @@ server.get('/db/doc_get',function (request, response){
 				responseObj.data="Error API lookup";
 				response.send(JSON.stringify(responseObj));
 			}else{
-				if(result.rows[0] &&
-				result.rows[0].key == api.toUpperCase()){
+				if(result.rows&&
+				   result.rows.length>0&&
+				   result.rows[0] &&
+					result.rows[0].key == api.toUpperCase()){
 					client.query('  SELECT name, content FROM documents '+
 					' WHERE  name=$1 ',[k], function(err, res) {
 					if (err){
