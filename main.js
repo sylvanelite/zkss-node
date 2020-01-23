@@ -75,21 +75,21 @@ server.post('/db/doc_set',function (request, response){
 });
 server.get('/db/doc_get',function (request, response){
 	response.header("Access-Control-Allow-Origin", "*");
-	const client = new Client({
-	  connectionString: process.env.DATABASE_URL,
-	  ssl: true,
-	});
 	var responseObj = {
 		success:false,
 		data:{}
 	};
 	if(!request.query||
 	   !request.query.hasOwnProperty("data_key")||
-	   !request.query.hasOwnProperty("api")||){
+	   !request.query.hasOwnProperty("api")){
 		responseObj.success=false;
 		responseObj.data="Error params";
 		response.send(JSON.stringify(responseObj));
 	}else{
+		const client = new Client({
+		  connectionString: process.env.DATABASE_URL,
+		  ssl: true,
+		});
 		var k = request.query.data_key;
 		var api = request.query.api;
 		client.connect();
