@@ -80,7 +80,6 @@ server.get('/db/doc_get',function (request, response){
 		success:false,
 		data:{}
 	};
-	try{
 	if(!request.query||
 	   !request.query.hasOwnProperty("data_key")||
 	   !request.query.hasOwnProperty("api")){
@@ -130,11 +129,6 @@ server.get('/db/doc_get',function (request, response){
 				}
 			}
 		});
-	}
-	}catch(e){
-		responseObj.success=false;
-		responseObj.data="Error exception "+JSON.stringify(e);
-		response.send(JSON.stringify(responseObj));
 	}
 });
 
