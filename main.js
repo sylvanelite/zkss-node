@@ -87,6 +87,11 @@ server.get('/db/doc_get',function (request, response){
 		responseObj.data="Error params";
 		response.send(JSON.stringify(responseObj));
 	}else{
+		
+		responseObj.success=false;
+		responseObj.data="test got here params";
+		response.send(JSON.stringify(responseObj));
+		
 		const client = new Client({
 		  connectionString: process.env.DATABASE_URL,
 		  ssl: true,
