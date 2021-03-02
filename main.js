@@ -2,6 +2,7 @@
 
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const PORT =  process.env.PORT || 8080;
 const INDEX = path.join(__dirname, './index.html');
@@ -169,9 +170,24 @@ server.get('/db/doc_get',function  (request, response) {
 
 //anything in /html/<project>/node is first "required" and then run
 server.get('/html/*/node', function(req, res, next){
-	const source = reqiure(req.path);
-	response.send(""+source);
+	//load the requested file
+  var file = req.url;
+  fs.stat(file, function(err, stats) {
+    if (err || !stats.isFile()) {
+      res.writeHead(404);
+      res.send();
+      return;
+    }
 
+    fs.readFile(file, function(err, data) {
+      res.writeHead(200);
+			
+			//TODO: eval data??
+			
+      res.end(data);
+    });
+  });
+	
 });
 
 
