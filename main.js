@@ -2,7 +2,6 @@
 
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
 
 const PORT =  process.env.PORT || 8080;
 const INDEX = path.join(__dirname, './index.html');
@@ -169,25 +168,18 @@ server.get('/db/doc_get',function  (request, response) {
 });
 
 //anything in /html/<project>/node/<file>.js is loaded and then run
-server.use('/html/*/node', function(req, res, next){
+server.use('/html/*/node', function(request, response, next){
 	//check the requested file exists
-  var file = req.path;
-  fs.stat(file, function(err, stats) {
-    if (err || !stats.isFile()) {
-      res.writeHead(200);
-      res.send("four oh four");
-      return;
-    }
-
-    fs.readFile(file, function(err, data) {
-      res.writeHead(200);
-			
-			//TODO: eval data??
-			data="asdfasdfasdfasdf"+data;
-      res.send(data);
-    });
-  });
-	//res.send("hello node");
+	try{
+		import(req.path).then(function(js){
+		//js.default();
+			response.send("hellp: "+js);
+		});
+	}catch(e){
+			response.send("err: "+e);
+	}
+	
+	
 });
 
 
