@@ -14,10 +14,11 @@ let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT
 
 const { Client } = require('pg');
 
+//https://stackoverflow.com/questions/61403073/heroku-postgres-node-connection-timeout
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false
+    rejectUnauthorized: true
   }
 });
 
