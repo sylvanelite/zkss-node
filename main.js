@@ -179,3 +179,4 @@ server.use('/html/+/node', function(req, res, next){
 
 //anything in /html is served as a static file
 //server.get('/html', express.static('html'));
+server.get('/html', function(req, res) { res.sendFile(INDEX); });
