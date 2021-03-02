@@ -173,8 +173,7 @@ server.use('/html/*/node', function(request, response){
 	try{
 		let pth = "./html/zkss-au/node/getmessage.mjs"
 		import(pth/*request.url*/).then(function(js){
-		//js.default();
-			response.send("hellp: "+js.default(request,pool));
+			js.default(request,response,pool);
 		});
 	}catch(e){
 			response.send("err: "+e);
