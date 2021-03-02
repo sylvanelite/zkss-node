@@ -13,14 +13,16 @@ server.use(express.urlencoded({extended:true}));
 let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const { Client } = require('pg');
-
-//https://stackoverflow.com/questions/61403073/heroku-postgres-node-connection-timeout
-const client = new Client({
+const dbConfig = {
   connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
+  connectionTimeoutMillis:5000,
   ssl: {
     rejectUnauthorized: false
   }
-});
+};
+
+//https://stackoverflow.com/questions/61403073/heroku-postgres-node-connection-timeout
+const client = new Client(dbConfig);
 
 server.post('/db/doc_set',function (request, response){
 	response.header("Access-Control-Allow-Origin", "*");
@@ -46,16 +48,11 @@ server.post('/db/doc_set',function (request, response){
 					 result.rows.length>0&&
 					 result.rows[0] &&
 					 result.rows[0].key == api.toUpperCase()){
-					let client2 = new Client({
-						connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
-						ssl: {
-							rejectUnauthorized: false
-						}
-					});
+					let client2 = new Client(dbConfig);
 					client2.query('  INSERT INTO documents (name, content) '+
 					' VALUES ($1, $2) ON CONFLICT (name) DO UPDATE '+
 					' SET content=$2 WHERE documents.name=$1',[k,v])
-						.then(function(result2){
+						.then(function(/*result2*/){
 							responseObj.success=true;
 							responseObj.data="success";
 							response.send(JSON.stringify(responseObj));
@@ -103,12 +100,7 @@ server.get('/db/doc_get',function  (request, response) {
 				 result.rows.length>0&&
 				 result.rows[0] &&
 				  result.rows[0].key == api.toUpperCase()){
-					let client2 = new Client({
-						connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
-						ssl: {
-							rejectUnauthorized: false
-						}
-					});
+					let client2 = new Client(dbConfig);
 					client2.query('  SELECT name, content FROM documents '+
 										  ' WHERE  name=$1 ',[k])
 							.then(function(result2){
@@ -148,15 +140,10 @@ server.get('/db/doc_get',function  (request, response) {
 //anything in /html/<project>/node/<file>.js is loaded and then run
 server.use('/html/*/node', function(request, response){
 	//check the requested file exists
+  /*
 	console.log(process.env.HEROKU_POSTGRESQL_BLACK_URL);
 	console.log("starting client");
-const client = new Client({
-  connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
-  connectionTimeoutMillis:5000,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+const client = new Client(dbConfig);
 	console.log("connecting client");
 
 client.connect();
@@ -172,8 +159,7 @@ client.query('SELECT table_schema,table_name FROM information_schema.tables;', (
   client.end();
 });
 	console.log("query client done");
-	
-	/*
+	*/
 	
 	try{
 		let pth = "./html/zkss-au/node/getmessage.mjs";//TODO: remove this, request.path??
@@ -182,7 +168,7 @@ client.query('SELECT table_schema,table_name FROM information_schema.tables;', (
 		});
 	}catch(e){
 			response.send("err: "+e);
-	}*/
+	}
 });
 
 
