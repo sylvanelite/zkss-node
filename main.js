@@ -174,7 +174,7 @@ server.use('/html/*/node', function(request, response, next){
 		let pth = "./html/zkss-au/node/getmessage.mjs"
 		import(pth/*request.url*/).then(function(js){
 		//js.default();
-			response.send("hellp: "+js);
+			response.send("hellp: "+js.default());
 		});
 	}catch(e){
 			response.send("err: "+e);
