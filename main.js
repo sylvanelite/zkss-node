@@ -173,7 +173,7 @@ server.get('/db/doc_get',function  (request, response) {
 server.use('/html', express.static('html'));
 
 //anything in /html/<project>/node is first "required" and then run
-server.use('/html/*/node', function(req, res, next){
+server.use('/html/+/node', function(req, res, next){
 	const source = reqiure(req.path);
 	response.send(""+source);
 
