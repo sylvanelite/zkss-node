@@ -171,7 +171,7 @@ server.get('/db/doc_get',function  (request, response) {
 //anything in /html/<project>/node/<file>.js is loaded and then run
 server.use('/html/*/node', function(req, res, next){
 	//check the requested file exists
-  var file = req.url;
+  var file = req.path;
   fs.stat(file, function(err, stats) {
     if (err || !stats.isFile()) {
       res.writeHead(404);
