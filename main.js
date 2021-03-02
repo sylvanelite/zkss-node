@@ -94,6 +94,7 @@ server.get('/db/doc_get',function  (request, response) {
 	}else{
 		var k = request.query.data_key;
 		var api = request.query.api;
+		client.connect();
 		client.query(' SELECT key FROM api WHERE (key=$1) ',[api])
 			.then(function(result){
 			  if(result.rows&&
@@ -101,6 +102,7 @@ server.get('/db/doc_get',function  (request, response) {
 				 result.rows[0] &&
 				  result.rows[0].key == api.toUpperCase()){
 					let client2 = new Client(dbConfig);
+          client2.connect();
 					client2.query('  SELECT name, content FROM documents '+
 										  ' WHERE  name=$1 ',[k])
 							.then(function(result2){
@@ -122,7 +124,7 @@ server.get('/db/doc_get',function  (request, response) {
 						response.send(JSON.stringify(responseObj));
 						}).then(function(){
 								client2.end();
-								});
+					  });
 			  }else{
 				  responseObj.success=false;
 				  responseObj.data="Error API Key";
