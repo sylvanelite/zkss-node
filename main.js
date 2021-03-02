@@ -168,9 +168,9 @@ server.get('/db/doc_get',function  (request, response) {
 	}
 });
 
-//anything in /html/<project>/node is first "required" and then run
+//anything in /html/<project>/node/<file>.js is loaded and then run
 server.get('/html/*/node', function(req, res, next){
-	//load the requested file
+	//check the requested file exists
   var file = req.url;
   fs.stat(file, function(err, stats) {
     if (err || !stats.isFile()) {
@@ -178,14 +178,10 @@ server.get('/html/*/node', function(req, res, next){
       res.send();
       return;
     }
+		
+		const js = await import(file);
+		return js.default();
 
-    fs.readFile(file, function(err, data) {
-      res.writeHead(200);
-			
-			//TODO: eval data??
-			
-      res.end(data);
-    });
   });
 	
 });
