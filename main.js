@@ -141,8 +141,13 @@ server.get('/db/doc_get',function  (request, response) {
 
 //anything in /html/<project>/node/<file>.js is loaded and then run
 server.use('/html/*/node', function(request, response){
+  console.log(request.path);
+  console.log(request.originalUrl);
+  console.log(request.query);
+  console.log(request.baseUrl);
+  console.log(request.route);
+  console.log(request.subdomains);
 	//check the requested file exists
-
 	try{
 		let pth = "./html/zkss-au/node/getmessage.mjs";//TODO: remove this, request.path??
 		import(pth).then(function(js){
