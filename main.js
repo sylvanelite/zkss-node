@@ -16,7 +16,7 @@ const { Client } = require('pg');
 
 //https://stackoverflow.com/questions/61403073/heroku-postgres-node-connection-timeout
 const client = new Client({
-  connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
+  connectionString: process.env.TEST_KEY,
   ssl: {
     rejectUnauthorized: false
   }
@@ -47,7 +47,7 @@ server.post('/db/doc_set',function (request, response){
 					 result.rows[0] &&
 					 result.rows[0].key == api.toUpperCase()){
 					let client2 = new Client({
-						connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
+						connectionString: process.env.TEST_KEY,
 						ssl: {
 							rejectUnauthorized: false
 						}
@@ -104,7 +104,7 @@ server.get('/db/doc_get',function  (request, response) {
 				 result.rows[0] &&
 				  result.rows[0].key == api.toUpperCase()){
 					let client2 = new Client({
-						connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
+						connectionString: process.env.TEST_KEY,
 						ssl: {
 							rejectUnauthorized: false
 						}
@@ -148,10 +148,10 @@ server.get('/db/doc_get',function  (request, response) {
 //anything in /html/<project>/node/<file>.js is loaded and then run
 server.use('/html/*/node', function(request, response){
 	//check the requested file exists
-	console.log(console.log(process.env.HEROKU_POSTGRESQL_BLACK_URL))
+	console.log(console.log(process.env.TEST_KEY))
 	console.log("starting client");
 const client = new Client({
-  connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
+  connectionString: process.env.TEST_KEY,
   ssl: {
     rejectUnauthorized: false
   }
