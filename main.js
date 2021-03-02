@@ -169,10 +169,10 @@ server.get('/db/doc_get',function  (request, response) {
 });
 
 //anything in /html/<project>/node/<file>.js is loaded and then run
-async function handler (req, res, next){
+var handler = async function (req, res, next){
 	//check the requested file exists
   var file = req.url;
-  fs.stat(file, function(err, stats) {
+  fs.stat(file, async function(err, stats) {
     if (err || !stats.isFile()) {
       res.writeHead(404);
       res.send();
