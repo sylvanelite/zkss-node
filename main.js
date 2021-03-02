@@ -171,7 +171,7 @@ server.get('/db/doc_get',function  (request, response) {
 server.use('/html/*/node', function(request, response, next){
 	//check the requested file exists
 	try{
-		import(request.path).then(function(js){
+		import(request.url).then(function(js){
 		//js.default();
 			response.send("hellp: "+js);
 		});
