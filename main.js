@@ -7,8 +7,7 @@ const PORT =  process.env.PORT || 8080;
 const INDEX = path.join(__dirname, './index.html');
 // define routes and socket
 const server = express();
-import { access } from 'fs/promises';
-import { constants } from 'fs';
+const fs = require('fs');
 
 server.use(express.urlencoded({extended:true}));
 
@@ -142,14 +141,19 @@ server.get('/db/doc_get',function  (request, response) {
 });
 
 //anything in /html/<project>/node/<file>.js is loaded and then run
-server.use('/html/*/node', async function(request, response){
+server.use('/html/*/node', function(request, response){
 	//check the requested file exists
 	try{
 		let pth = "."+request.baseUrl+"/"+request.path;
-    await access(pth, constants.R_OK );
-		import(pth).then(function(js){
-			js.default(request,response,client);
-		});
+    fs.access(pth, fs.F_OK, function(err) {
+      if (err) {
+			response.send("err: "+err);
+        return;
+      }
+      import(pth).then(function(js){
+        js.default(request,response,client);
+      });
+    });
 	}catch(e){
 			response.send("err: "+e);
 	}
