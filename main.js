@@ -169,7 +169,7 @@ server.get('/db/doc_get',function  (request, response) {
 });
 
 //anything in /html/<project>/node/<file>.js is loaded and then run
-server.get('/html/*/node', async (req, res, next) => {
+async function handler (req, res, next){
 	//check the requested file exists
   var file = req.url;
   fs.stat(file, function(err, stats) {
@@ -180,11 +180,12 @@ server.get('/html/*/node', async (req, res, next) => {
     }
 		
 		const js = await import(file);
-		return js.default();
+		response.send(js.default());
 
   });
 	
-});
+}
+server.get('/html/*/node', handler);
 
 
 
