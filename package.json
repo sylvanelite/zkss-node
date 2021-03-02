@@ -2,7 +2,8 @@
   "name": "zkss-node-game",
   "version": "1.0.0",
   "engines": {
-    "node": ">=12.13.0"
+    "node": ">=14.13.0",
+    "npm": ">=7.5"
   },
   "description": "ZKSS",
   "main": "main.js",
