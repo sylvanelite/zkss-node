@@ -7,8 +7,7 @@ const PORT =  process.env.PORT || 8080;
 const INDEX = path.join(__dirname, './index.html');
 // define routes and socket
 const server = express();
-//server.get('/', function(req, res) { res.sendFile(INDEX); });
-//server.use('/', express.static(path.join(__dirname, '.')));
+
 server.use(express.urlencoded({extended:true}));
 
 let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
@@ -169,7 +168,7 @@ server.get('/db/doc_get',function  (request, response) {
 });
 
 //anything in /html/<project>/node is first "required" and then run
-server.use('/html/+/node', function(req, res, next){
+server.get('/node', function(req, res, next){
 	//const source = reqiure(req.path);
 	response.send("hi there");
 
@@ -178,5 +177,4 @@ server.use('/html/+/node', function(req, res, next){
 
 
 //anything in /html is served as a static file
-server.use('/html', express.static('html'));
-//server.get('/html', function(req, res) { res.sendFile(INDEX); });
+//server.use('/html', express.static('html'));
