@@ -169,9 +169,8 @@ server.get('/db/doc_get',function  (request, response) {
 });
 
 //anything in /html/<project>/node/<file>.js is loaded and then run
-var handler = async function (req, res, next){
+server.get('/html/*/node', sync function (req, res, next){
 	//check the requested file exists
-	
   var file = req.url;
   fs.stat(file, async function(err, stats) {
     if (err || !stats.isFile()) {
@@ -185,8 +184,7 @@ var handler = async function (req, res, next){
 		
 		res.send(js.default());
   });
-}
-server.get('/html/*/node', handler);
+});
 
 
 
