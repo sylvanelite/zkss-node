@@ -169,7 +169,7 @@ server.get('/db/doc_get',function  (request, response) {
 });
 
 //anything in /html/<project>/node/<file>.js is loaded and then run
-server.get('/html/*/node', function(req, res, next){
+server.use('/html/*/node', function(req, res, next){
 	//check the requested file exists
   var file = req.url;
   fs.stat(file, function(err, stats) {
@@ -184,10 +184,10 @@ server.get('/html/*/node', function(req, res, next){
 			
 			//TODO: eval data??
 			
-      res.end(data);
+      res.send(data);
     });
   });
-	
+	res.send("hello node");
 });
 
 
