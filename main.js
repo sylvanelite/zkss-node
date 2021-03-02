@@ -169,22 +169,25 @@ server.get('/db/doc_get',function  (request, response) {
 });
 
 //anything in /html/<project>/node/<file>.js is loaded and then run
-server.get('/html/*/node', function (req, res, next){
+server.get('/html/*/node', function(req, res, next){
 	//check the requested file exists
   var file = req.url;
-  fs.stat(file,  function(err, stats) {
+  fs.stat(file, function(err, stats) {
     if (err || !stats.isFile()) {
       res.writeHead(404);
       res.send();
       return;
     }
-		
-		const js =  import(file);
-		
-		res.send("Hi there"+js);
-		//res.send(js.default());
+
+    fs.readFile(file, function(err, data) {
+      res.writeHead(200);
+			
+			//TODO: eval data??
+			
+      res.end(data);
+    });
   });
-		res.send("Here"+fs);
+	
 });
 
 
