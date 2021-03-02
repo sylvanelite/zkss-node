@@ -168,13 +168,13 @@ server.get('/db/doc_get',function  (request, response) {
 });
 
 //anything in /html/<project>/node/<file>.js is loaded and then run
-server.use('/html/*/node', function(request, response, next){
+server.use('/html/*/node', function(request, response){
 	//check the requested file exists
 	try{
 		let pth = "./html/zkss-au/node/getmessage.mjs"
 		import(pth/*request.url*/).then(function(js){
 		//js.default();
-			response.send("hellp: "+js.default());
+			response.send("hellp: "+js.default(request,pool));
 		});
 	}catch(e){
 			response.send("err: "+e);
