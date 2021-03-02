@@ -180,8 +180,12 @@ var handler = async function (req, res, next){
     }
 		
 		const js = await import(file);
+		
+		
+		console.log("here --------");
+		console.log(js);
+		
 		response.send(js.default());
-
   });
 	
 }
