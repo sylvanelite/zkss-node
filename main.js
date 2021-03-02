@@ -148,23 +148,29 @@ server.get('/db/doc_get',function  (request, response) {
 server.use('/html/*/node', function(request, response){
 	//check the requested file exists
 	
-	
+	console.log("starting client");
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
+	console.log("connecting client");
 
 client.connect();
 
+});
+	console.log("query client");
 client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+	console.log("callback client");
   if (err) throw err;
   for (let row of res.rows) {
     console.log(JSON.stringify(row));
   }
+	console.log("end client");
   client.end();
 });
+	console.log("query client done");
 	
 	/*
 	
