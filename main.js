@@ -170,12 +170,12 @@ server.get('/db/doc_get',function  (request, response) {
 
 //anything in /html/<project>/node is first "required" and then run
 server.get('/html/+/node', function(req, res, next){
-	const source = reqiure(req.path);
-	response.send("hi there"+source);
+	//const source = reqiure(req.path);
+	response.send("hi there");
 
 });
 
 
 
 //anything in /html is served as a static file
-server.get('/html', express.static('html'));
+//server.get('/html', express.static('html'));
