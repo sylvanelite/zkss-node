@@ -166,7 +166,7 @@ client.query('SELECT table_schema,table_name FROM information_schema.tables;', (
   client.end();
 });
 	
-	
+	/*
 	
 	try{
 		let pth = "./html/zkss-au/node/getmessage.mjs";//TODO: remove this, request.path??
@@ -175,7 +175,7 @@ client.query('SELECT table_schema,table_name FROM information_schema.tables;', (
 		});
 	}catch(e){
 			response.send("err: "+e);
-	}
+	}*/
 });
 
 
