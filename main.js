@@ -171,11 +171,11 @@ server.get('/db/doc_get',function  (request, response) {
 //anything in /html/<project>/node/<file>.js is loaded and then run
 var handler = async function (req, res, next){
 	//check the requested file exists
-	/*
+	
   var file = req.url;
   fs.stat(file, async function(err, stats) {
     if (err || !stats.isFile()) {
-      res.writeHead(404);
+      res.writeHead(500);
       res.send();
       return;
     }
@@ -184,11 +184,7 @@ var handler = async function (req, res, next){
 		
 		
 		res.send(js.default());
-  });*/
-	
-		const js = await import(file);
-		res.send(js.default());
-	
+  });
 }
 server.get('/html/*/node', handler);
 
