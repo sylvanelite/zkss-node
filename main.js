@@ -174,8 +174,8 @@ server.use('/html/*/node', function(req, res, next){
   var file = req.path;
   fs.stat(file, function(err, stats) {
     if (err || !stats.isFile()) {
-      res.writeHead(404);
-      res.send();
+      res.writeHead(200);
+      res.send("four oh four");
       return;
     }
 
