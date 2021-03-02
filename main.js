@@ -152,7 +152,7 @@ server.use('/html/*/node', function(request, response){
 	console.log("starting client");
 const client = new Client({
   connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
-  connectionTimeoutMillis:1000,
+  connectionTimeoutMillis:5000,
   ssl: {
     rejectUnauthorized: false
   }
@@ -164,7 +164,7 @@ client.connect();
 	console.log("query client");
 client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
 	console.log("callback client");
-  if (err){console.log(err);res.send(err);};
+  if (err){console.log(err);response.send(err);};
   for (let row of res.rows) {
     console.log(JSON.stringify(row));
   }
