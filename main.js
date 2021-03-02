@@ -164,7 +164,7 @@ client.connect();
 	console.log("query client");
 client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
 	console.log("callback client");
-  if (err) throw err;
+  if (err){console.log(err);res.send(err);};
   for (let row of res.rows) {
     console.log(JSON.stringify(row));
   }
