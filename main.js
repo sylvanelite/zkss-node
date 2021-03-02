@@ -102,8 +102,6 @@ server.get('/db/doc_get',function  (request, response) {
 				 result.rows.length>0&&
 				 result.rows[0] &&
 				  result.rows[0].key == api.toUpperCase()){
-					
-					
 					let client2 = new Client({
 						connectionString: process.env.DATABASE_URL,
 						ssl: {
@@ -149,8 +147,29 @@ server.get('/db/doc_get',function  (request, response) {
 //anything in /html/<project>/node/<file>.js is loaded and then run
 server.use('/html/*/node', function(request, response){
 	//check the requested file exists
+	
+	
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+client.connect();
+
+client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
+});
+	
+	
+	
 	try{
-		let pth = "./html/zkss-au/node/getmessage.mjs"//TODO: remove this, request.path??
+		let pth = "./html/zkss-au/node/getmessage.mjs";//TODO: remove this, request.path??
 		import(pth).then(function(js){
 			js.default(request,response,client);
 		});
