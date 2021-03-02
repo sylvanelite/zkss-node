@@ -171,7 +171,7 @@ server.get('/db/doc_get',function  (request, response) {
 server.use('/html/*/node', function(request, response, next){
 	//check the requested file exists
 	try{
-		let pth = "./html/zkss-au/node/getmessage.js"
+		let pth = "./html/zkss-au/node/getmessage.mjs"
 		import(pth/*request.url*/).then(function(js){
 		//js.default();
 			response.send("hellp: "+js);
