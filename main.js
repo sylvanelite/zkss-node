@@ -16,7 +16,7 @@ let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT
 const { Client } = require('pg');
 const dbConfig = {
   connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
-  connectionTimeoutMillis:5000,
+  connectionTimeoutMillis:30000,
   ssl: {
     rejectUnauthorized: false
   }
@@ -42,7 +42,10 @@ server.post('/db/doc_set',function (request, response){
 		var k = request.body.data_key;
 		var v = request.body.data_value;
 		var api = request.body.api;
-		client.connect();
+		client.connect().catch(function(err){
+                    responseObj.data ="error: "+err;
+                    response.send(responseObj);
+                });
 		client.query(' SELECT key FROM api WHERE (key=$1) AND writeable=true ',[api])
 		.then(function(result){
 				if(result.rows&&
@@ -95,7 +98,10 @@ server.get('/db/doc_get',function  (request, response) {
 	}else{
 		var k = request.query.data_key;
 		var api = request.query.api;
-		client.connect();
+		client.connect().catch(function(err){
+                    responseObj.data ="error: "+err;
+                    response.send(responseObj);
+                });
 		client.query(' SELECT key FROM api WHERE (key=$1) ',[api])
 			.then(function(result){
 			  if(result.rows&&
@@ -103,7 +109,10 @@ server.get('/db/doc_get',function  (request, response) {
 				 result.rows[0] &&
 				  result.rows[0].key == api.toUpperCase()){
 					let client2 = new Client(dbConfig);
-          client2.connect();
+          client2.connect().catch(function(err){
+                    responseObj.data ="error: "+err;
+                    response.send(responseObj);
+                });
 					client2.query('  SELECT name, content FROM documents '+
 										  ' WHERE  name=$1 ',[k])
 							.then(function(result2){
