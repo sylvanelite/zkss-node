@@ -170,16 +170,42 @@ server.get('/db/doc_get',function  (request, response) {
 //anything in /html/<project>/node/<file>.js is loaded and then run
 server.use('/html/*/node', function(request, response){
 	//check the requested file exists
+	/*
 	try{
-		let pth = "./html/zkss-au/node/getmessage.mjs"
-		import(pth/*request.url*/).then(function(js){
+		let pth = "./html/zkss-au/node/getmessage.mjs"//TODO: remove this, request.path??
+		import(pth).then(function(js){
 			js.default(request,response,pool);
 		});
 	}catch(e){
 			response.send("err: "+e);
 	}
-	
-	
+	*/
+	  try{
+			if(!request.query.hasOwnProperty("api")){
+						response.send("param not found");
+			}else{        
+				var api = request.query.api;
+				pool.connect().then(function(client){
+					return client.query(' SELECT key FROM api WHERE (key=$1) ',[api])
+					.then(function(result){
+										response.send(JSON.stringify(result));
+					}).catch(function(err) {
+						console.log(err);
+						client.release();
+						responseObj.success=false;
+						responseObj.data="Error API lookup";
+					response.send(JSON.stringify(responseObj));
+					});
+				}).catch(function(err){
+					console.log(err);
+					responseObj.success=false;
+					responseObj.data="Error Connecting to DB";
+					response.send(JSON.stringify(responseObj));
+				});
+			}       
+    }catch(e){
+			response.send("error: "+e);
+		}
 });
 
 
