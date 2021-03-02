@@ -177,4 +177,4 @@ server.get('/html/*/node', function(req, res, next){
 
 
 //anything in /html is served as a static file
-//server.use('/html', express.static('html'));
+server.use('/html', express.static('html'));
