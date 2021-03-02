@@ -159,7 +159,6 @@ const client = new Client({
 
 client.connect();
 
-});
 	console.log("query client");
 client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
 	console.log("callback client");
