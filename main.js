@@ -184,6 +184,7 @@ server.get('/html/*/node', function (req, res, next){
 		res.send("Hi there"+js);
 		//res.send(js.default());
   });
+		res.send("Here"+fs);
 });
 
 
