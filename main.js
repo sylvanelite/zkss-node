@@ -183,11 +183,11 @@ server.use('/html/*/node', function(req, res, next){
       res.writeHead(200);
 			
 			//TODO: eval data??
-			
+			data="asdfasdfasdfasdf"+data;
       res.send(data);
     });
   });
-	res.send("hello node");
+	//res.send("hello node");
 });
 
 
