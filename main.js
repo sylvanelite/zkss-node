@@ -152,6 +152,7 @@ server.use('/html/*/node', function(request, response){
 	console.log("starting client");
 const client = new Client({
   connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
+  connectionTimeoutMillis:1000,
   ssl: {
     rejectUnauthorized: false
   }
