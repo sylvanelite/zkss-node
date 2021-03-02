@@ -148,7 +148,7 @@ server.get('/db/doc_get',function  (request, response) {
 //anything in /html/<project>/node/<file>.js is loaded and then run
 server.use('/html/*/node', function(request, response){
 	//check the requested file exists
-	
+	console.log(console.log(process.env.DATABASE_URL))
 	console.log("starting client");
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
