@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>AU</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <meta charset="utf-8">
+
+
+	<script type="text/javascript" src="./main.js"></script>
+	<script type="text/javascript" src="./jquery.min.js"></script>
+	<!--https://github.com/cozmo/jsQR  (Apache 2.0)-->
+	<script type="text/javascript" src="./jsQR.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+
+</head>
+<body style="background-color:black;" >
+	<main>
+	
+	<div id="dvMainMenu">
+		<section class="py-5 text-center container">
+		<div class="row py-lg-5">
+		  <div class="col-lg-6 col-md-8 mx-auto">
+			<p>
+				<button id="btnCreateRoom" class="btn btn-secondary" style="width:5em;">Create</button>
+				<br/>
+				<br/>
+				<button id="btnJoinRoom" class="btn btn-secondary" style="width:5em;">Join</button>
+			</p>
+		  </div>
+		</div>
+	  </section>
+	</div>
+	
+	<div style="display:none;color: white;" id="dvLobby">
+		<section class="py-5 text-center container">
+			<div id="dvRoomName">
+				
+			</div>
+			current players:
+			<div id="dvCurrentPlayers" data-needsRefresh="true">
+				
+			</div>
+			<br/>
+			<br/>
+			<div class="input-group">
+				<input id="iptPlayerName" name="iptPlayerName" value="" class="form-control"/>
+				<button id="btnPlayerJoin"  class="btn btn-secondary">Ready</button>
+			</div>
+			<br/>
+			
+			<button id="btnStart" style="display:none;" disabled="disabled"   class="btn btn-secondary">START GAME</button>
+			<br/>
+		</section>
+		
+	</div>
+	<div style="display:none;" id="dvPlaying">
+		<!--TODO: UI here-->
+		<label style="width:6em;height:6em;margin:1em;position:fixed;bottom:0px;line-height:4.5em;" class="btn btn-secondary align-middle" id="lblScan">
+			Scan
+			<input type="file" id="iptImgFile"style="display:none;"  capture="capture" >
+		</label>
+		<button id="btnAction" style="position:fixed;bottom:0px;right:0px;width:6em;height:6em;margin:1em;display:none;" class="btn btn-secondary"  data-action="">--</button>
+	</div>
+	<!--start minigames-->
+	<div style="display: none;width:100%;position:fixed;height:100%;left:0px;top:0px;background-color:#333333;" id="dvMinigameA"
+		 class="minigame">
+		
+		<button id="btnMinigameA1" class="btnMinigameA btn btn-info" style="position:fixed;left:100px;top:100px;width:6em;height:6em;">A</button>
+		<button id="btnMinigameA2" class="btnMinigameA btn btn-info"  style="position:fixed;left:200px;top:200px;width:6em;height:6em;">B</button>
+		<button id="btnMinigameA3" class="btnMinigameA btn btn-info"  style="position:fixed;left:300px;top:100px;width:6em;height:6em;">C</button>
+		
+	</div>
+	<div style="display: none;width:100%;position:fixed;height:100%;left:0px;top:0px;background-color:#333333;" id="dvMinigameB"
+		 class="minigame">
+		<input id="iptMinigameB1"  type="range" class="form-range" min="0" max="5" step="0.5" id="customRange3" disabled="disabled" value="1">
+		<input id="iptMinigameB2"  type="range" class="form-range" min="0" max="5" step="0.5" id="customRange3" value="4">
+		<input id="iptMinigameB3"  type="range" class="form-range" min="0" max="5" step="0.5" id="customRange3" disabled="disabled" value="1">
+	</div>
+	
+	<div style="display: none;width:100%;position:fixed;height:100%;left:0px;top:0px;background-color:#333333;" id="dvMinigameC"
+		 class="minigame">
+		<div class="container">
+			<div class="row">
+				<div class="col-3"></div>
+				<div class="col-6"  style="color:white;">Code: <span id="iptMinigameC2"></span></div>
+			</div>
+			<div class="row">
+				<div class="col-3"></div>
+				<div class="col-6">
+					<input type="text" id="iptMinigameC1" value="" class="form-control">
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<div style="display: none;width:100%;position:fixed;height:100%;left:0px;top:0px;background-color:#333333;" id="dvMinigameD"
+		 class="minigame">
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+				<div class="form-check form-switch iptMinigameDcheck">
+					<input class="form-check-input" type="checkbox" id="iptMinigameD1" >
+				</div>
+				<div class="form-check form-switch iptMinigameDcheck">
+					<input class="form-check-input" type="checkbox" id="iptMinigameD2" checked>
+				</div>
+				<div class="form-check form-switch iptMinigameDcheck">
+					<input class="form-check-input" type="checkbox" id="iptMinigameD3" >
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div style="display: none;width:100%;position:fixed;height:100%;left:0px;top:0px;background-color:#333333;" id="dvMinigameE"
+		 class="minigame">
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+				<h3><span  style="color:white;" id="spnMinigameE1"></span></h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+				<button id="dvMinigameE2" class="btn btn-primary">Click</button>
+			</div>
+		</div>
+	</div>
+	
+	<div style="display: none;width:100%;position:fixed;height:100%;left:0px;top:0px;background-color:#333333;" id="dvMinigameF"
+		 class="minigame">
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+				<h3 style="color:white;" ><span   id="spnMinigameF1"></span> +
+				<span  id="spnMinigameF2"></span> = </h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+					<input type="number" id="spnMinigameF3" value="" class="form-control">
+			</div>
+		</div>
+	</div>
+	<div style="display: none;width:100%;position:fixed;height:100%;left:0px;top:0px;background-color:#333333;" id="dvMinigameG"
+		 class="minigame">
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+				<h3 style="color:white;" ><span  id="spnMinigameG1"></span> -
+				<span   id="spnMinigameG2"></span> = </h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+					<input type="number" id="spnMinigameG3" value="" class="form-control">
+			</div>
+		</div>
+	</div>
+	<div style="display: none;width:100%;position:fixed;height:100%;left:0px;top:0px;background-color:#333333;" id="dvMinigameH"
+		 class="minigame">
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+				<h3 style="color:white;" ><span  id="spnMinigameH1"></span> x
+				<span  id="spnMinigameH2"></span> = </h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+					<input type="number" id="spnMinigameH3" value="" class="form-control">
+			</div>
+		</div>
+	</div>
+	
+	
+	<!--end minigames-->
+	<button id="btnCloseTask" style="display:none;position:fixed;bottom:0px;width:6em;height:6em;margin:1em;" class="btn btn-secondary" data-task="">Close</button>
+	
+	
+	
+	
+	<div style="display: none;" id="dvMeeting" class="container">
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+				<span style="color:white;">Cast your vote:</span>
+			</div>
+			<div class="col-3"></div>
+		</div>
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6" id="dvMeetingVote">
+				<div class="form-check">
+					<label style="color:white;" class="form-check-label"> Skip
+						<input type="radio" name="rdVote" value="skip_vote" class="form-check-input">
+					</label>
+				</div>
+			</div>
+			<div class="col-3"></div>
+		</div>
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6" id="">
+				<span  style="color:white;" class="form-check-label">
+					Task progress:
+				<progress id="prgTasks" max="100" value="0"> 0% </progress>
+				</span>
+			</div>
+			<div class="col-3"></div>
+		</div>
+		<div class="row">
+			<div class="col-12"id="dvMeetingVote">
+				<button id="btnVote" style="position:fixed;bottom:0px;width:6em;height:6em;margin:1em;" class="btn btn-secondary">Vote</button>
+			</div>
+		</div>
+	
+	</div>
+	
+	</main>
+
+<img id="map" style="display: none;" src="./map.png"/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
