@@ -23,7 +23,6 @@ const dbConfig = {
 };
 
 //https://stackoverflow.com/questions/61403073/heroku-postgres-node-connection-timeout
-const client = new Client(dbConfig);
 
 server.post('/db/doc_set',function (request, response){
 	response.header("Access-Control-Allow-Origin", "*");
@@ -42,6 +41,7 @@ server.post('/db/doc_set',function (request, response){
 		var k = request.body.data_key;
 		var v = request.body.data_value;
 		var api = request.body.api;
+    const client = new Client(dbConfig);
 		client.connect().catch(function(err){
                     responseObj.data ="error: "+err;
                     response.send(responseObj);
@@ -98,6 +98,7 @@ server.get('/db/doc_get',function  (request, response) {
 	}else{
 		var k = request.query.data_key;
 		var api = request.query.api;
+    const client = new Client(dbConfig);
 		client.connect().catch(function(err){
                     responseObj.data ="error: "+err;
                     response.send(responseObj);
@@ -160,6 +161,7 @@ server.use('/html/*/node', function(request, response){
         return;
       }
       import(pth).then(function(js){
+        const client = new Client(dbConfig);
         js.default(request,response,client);
       });
     });
