@@ -42,45 +42,46 @@ server.post('/db/doc_set',function (request, response){
 		var v = request.body.data_value;
 		var api = request.body.api;
     const client = new Client(dbConfig);
-		client.connect().catch(function(err){
-                    responseObj.data ="error: "+err;
-                    response.send(responseObj);
-                });
-		client.query(' SELECT key FROM api WHERE (key=$1) AND writeable=true ',[api])
-		.then(function(result){
-				if(result.rows&&
-					 result.rows.length>0&&
-					 result.rows[0] &&
-					 result.rows[0].key == api.toUpperCase()){
-					let client2 = new Client(dbConfig);
-					client2.query('  INSERT INTO documents (name, content) '+
-					' VALUES ($1, $2) ON CONFLICT (name) DO UPDATE '+
-					' SET content=$2 WHERE documents.name=$1',[k,v])
-						.then(function(/*result2*/){
-							responseObj.success=true;
-							responseObj.data="success";
-							response.send(JSON.stringify(responseObj));
-						}).catch(function(err){
-							console.error(err);
-							responseObj.success=false;
-							responseObj.data="Error Doc store";
-							response.send(JSON.stringify(responseObj));
-						}).then(function(){
-							client2.end();
-						});
-				}else{
-					responseObj.success=false;
-					responseObj.data="Error API Key";
-					response.send(JSON.stringify(responseObj));
-				}
-			}).catch(function(err) {
-				console.log(err);
-				client.release();
-				responseObj.success=false;
-				responseObj.data="Error API lookup";
-				response.send(JSON.stringify(responseObj));
-			})
-		.then(function(){client.end();});
+		client.connect().then(function(){
+      client.query(' SELECT key FROM api WHERE (key=$1) AND writeable=true ',[api])
+      .then(function(result){
+          if(result.rows&&
+             result.rows.length>0&&
+             result.rows[0] &&
+             result.rows[0].key == api.toUpperCase()){
+            let client2 = new Client(dbConfig);
+            client2.query('  INSERT INTO documents (name, content) '+
+            ' VALUES ($1, $2) ON CONFLICT (name) DO UPDATE '+
+            ' SET content=$2 WHERE documents.name=$1',[k,v])
+              .then(function(/*result2*/){
+                responseObj.success=true;
+                responseObj.data="success";
+                response.send(JSON.stringify(responseObj));
+              }).catch(function(err){
+                console.error(err);
+                responseObj.success=false;
+                responseObj.data="Error Doc store";
+                response.send(JSON.stringify(responseObj));
+              }).then(function(){
+                client2.end();
+              });
+          }else{
+            responseObj.success=false;
+            responseObj.data="Error API Key";
+            response.send(JSON.stringify(responseObj));
+          }
+        }).catch(function(err) {
+          console.log(err);
+          responseObj.success=false;
+          responseObj.data="Error API lookup";
+          response.send(JSON.stringify(responseObj));
+        })
+      .then(function(){client.end();});
+    }).catch(function(err){
+        responseObj.data ="error: "+err;
+        response.send(responseObj);
+    });
+		
 	}
 });
 server.get('/db/doc_get',function  (request, response) {
@@ -99,11 +100,8 @@ server.get('/db/doc_get',function  (request, response) {
 		var k = request.query.data_key;
 		var api = request.query.api;
     const client = new Client(dbConfig);
-		client.connect().catch(function(err){
-                    responseObj.data ="error: "+err;
-                    response.send(responseObj);
-                });
-		client.query(' SELECT key FROM api WHERE (key=$1) ',[api])
+		client.connect().then(function(){
+      client.query(' SELECT key FROM api WHERE (key=$1) ',[api])
 			.then(function(result){
 			  if(result.rows&&
 				 result.rows.length>0&&
@@ -147,6 +145,10 @@ server.get('/db/doc_get',function  (request, response) {
 			  responseObj.data="Error API lookup";
 			  response.send(JSON.stringify(responseObj));
 		  }).then(function(){ client.end(); });
+    }).catch(function(err){
+        responseObj.data ="error: "+err;
+        response.send(responseObj);
+    });
 	}
 });
 
