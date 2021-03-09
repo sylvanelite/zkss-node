@@ -152,6 +152,7 @@ server.get('/db/doc_get',function  (request, response) {
 	}
 });
 
+let mem = {};
 //anything in /html/<project>/node/<file>.js is loaded and then run
 server.use('/html/*/node', function(request, response){
 	//check the requested file exists
@@ -164,7 +165,7 @@ server.use('/html/*/node', function(request, response){
       }
       import(pth).then(function(js){
         const client = new Client(dbConfig);
-        js.default(request,response,client);
+        js.default(request,response,mem);
       });
     });
 	}catch(e){
